@@ -1,5 +1,5 @@
 {
-    "name": "vscode-typescript-code-navigator",
+    "name": "typescript-code-navigator",
     "displayName": "Typescript code navigator",
     "description": "A sample illustrating the use of TextContentProviders and the `vscode.previewHtml` command, introduce in 0.10.7",
     "version": "0.0.1",

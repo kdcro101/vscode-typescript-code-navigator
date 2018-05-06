@@ -11,6 +11,7 @@ import {
     FunctionDeclaration, GenericDeclaration,
     getVisibilityText,
     InterfaceDeclaration,
+    TypeAliasDeclaration,
     TypescriptParser,
     VariableDeclaration,
 } from "typescript-parser";
@@ -190,6 +191,7 @@ export class ContentParser {
             case "PropertyDeclaration":
                 break;
             case "TypeAliasDeclaration":
+                p = this.buildTypeAliasDeclaration(d as TypeAliasDeclaration);
                 break;
             case "VariableDeclaration":
                 p = this.buildVariableDeclaration(d as VariableDeclaration);
@@ -315,6 +317,12 @@ export class ContentParser {
     public buildFunctionDeclaration(d: FunctionDeclaration): string {
 
         const o = this.renderPartial(d.start, d.end, "function", d.name, d.isExported, d.type);
+        return o;
+
+    }
+    public buildTypeAliasDeclaration(d: TypeAliasDeclaration): string {
+
+        const o = this.renderPartial(d.start, d.end, "interface", d.name, d.isExported);
         return o;
 
     }
