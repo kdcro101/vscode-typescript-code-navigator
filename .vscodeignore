@@ -4,7 +4,12 @@ out/test/**
 test/**
 src/**
 embedded/**
+media/**
+scss/**
 **/*.map
 .gitignore
+.editorconfig
+.jsbeautifyrc
 tsconfig.json
+tslint.json
 vsc-extension-quickstart.md

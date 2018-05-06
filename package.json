@@ -4,6 +4,7 @@
     "description": "Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.",
     "version": "0.0.1",
     "publisher": "kdcro101",
+    "icon": "icon/icon.png",
     "galleryBanner": {
         "color": "#000217",
         "theme": "dark"
