@@ -1,21 +1,20 @@
 {
     "name": "typescript-code-navigator",
     "displayName": "Typescript code navigator",
-    "description": "A sample illustrating the use of TextContentProviders and the `vscode.previewHtml` command, introduce in 0.10.7",
+    "description": "Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opended typescript file.",
     "version": "0.0.1",
     "publisher": "kdcro101",
     "galleryBanner": {
-        "color": "#5c2d91",
+        "color": "#000217",
         "theme": "dark"
     },
     "bugs": {
-        "url": "https://github.com/kdcro101/vscode-typescript-navigator/issues"
+        "url": "https://github.com/kdcro101/vscode-typescript-code-navigator/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/kdcro101/vscode-typescript-navigator.git"
+        "url": "https://github.com/kdcro101/vscode-typescript-code-navigator.git"
     },
-    "homepage": "https://github.com/Microsoft/vscode-extension-samples/tree/master/textdocumentprovider-sample/README.md",
     "categories": [
         "Other"
     ],
