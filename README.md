@@ -1,6 +1,6 @@
 # Typescript code navigator
 
-Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opended typescript file.
+Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.
 
 
 ## Install
