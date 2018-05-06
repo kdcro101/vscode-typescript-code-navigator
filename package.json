@@ -1,0 +1,76 @@
+{
+    "name": "vscode-typescript-code-navigator",
+    "displayName": "Typescript code navigator",
+    "description": "A sample illustrating the use of TextContentProviders and the `vscode.previewHtml` command, introduce in 0.10.7",
+    "version": "0.0.1",
+    "publisher": "kdcro101",
+    "galleryBanner": {
+        "color": "#5c2d91",
+        "theme": "dark"
+    },
+    "bugs": {
+        "url": "https://github.com/kdcro101/vscode-typescript-navigator/issues",
+        "email": "egamma@microsoft.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kdcro101/vscode-typescript-navigator.git"
+    },
+    "homepage": "https://github.com/Microsoft/vscode-extension-samples/tree/master/textdocumentprovider-sample/README.md",
+    "categories": [
+        "Other"
+    ],
+    "engines": {
+        "vscode": "^1.23.0"
+    },
+    "activationEvents": [
+        "onLanguage:typescript"
+    ],
+    "main": "./out/extension",
+    "contributes": {
+        "commands": [{
+            "command": "extension.showTypescriptMembers",
+            "title": "Show Typescript code navigator"
+        }],
+        "configuration": [{
+            "title": "vscode-typescript-navigator-settings",
+            "type": "object",
+            "properties": {
+                "typescript.navigator.collapseEnums": {
+                    "type":"boolean",
+                    "default":true,
+                    "description": "Should collapse enums"
+                },
+                "typescript.navigator.collapseInterfaces": {
+                    "type":"boolean",
+                    "default":true,
+                    "description": "Should collapse interfaces"
+                },
+                "typescript.navigator.collapseClasses": {
+                    "type":"boolean",
+                    "default":false,
+                    "description": "Should collapse classes"
+                }
+            }
+        }]
+    },
+    "scripts": {
+        "vscode:prepublish": "tsc -p ./",
+        "compile": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "tslint": "tslint -c tslint.json src/extension.ts"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^5.0.2",
+        "@types/lodash": "^4.14.108",
+        "@types/node": "*",
+        "typescript": "^2.1.4",
+        "vscode": "^1.0.0"
+    },
+    "dependencies": {
+        "fs-extra": "^6.0.0",
+        "rxjs": "^6.1.0",
+        "sass": "^1.3.2",
+        "typescript-parser": "^2.4.0"
+    }
+}

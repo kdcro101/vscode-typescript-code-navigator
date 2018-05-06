@@ -1,0 +1,569 @@
+body.vscode-dark {
+  background-color: transparent;
+  padding: 0; }
+  body.vscode-dark .panel-top {
+    background-color: transparent; }
+    body.vscode-dark .panel-top #search {
+      color: white;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      padding: 8px;
+      font-size: 100%;
+      flex: 1 1 auto; }
+    body.vscode-dark .panel-top #collapseAll {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-left: 8px;
+      margin-right: 8px;
+      flex: 0 1 auto; }
+    body.vscode-dark .panel-top #expandAll {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto; }
+    body.vscode-dark .panel-top #filterActive {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto;
+      background-color: #f44336; }
+    body.vscode-dark .panel-top .action {
+      cursor: pointer;
+      user-select: none;
+      background-color: transparent; }
+    body.vscode-dark .panel-top .action:hover {
+      background-color: #006FC5;
+      color: white; }
+    body.vscode-dark .panel-top .action:active {
+      background-color: #e91e63;
+      color: white; }
+  body.vscode-dark .drop-down {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-dark .drop-down:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-dark .drop-up {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-dark .drop-up:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-dark .item.hidden {
+    display: none; }
+  body.vscode-dark .item .collapse-action.hidden {
+    display: none; }
+  body.vscode-dark .item.collapsable .drop-down {
+    display: none; }
+  body.vscode-dark .item.collapsable .drop-up {
+    display: block; }
+  body.vscode-dark .item.collapsable.collapsed .drop-down {
+    display: block; }
+  body.vscode-dark .item.collapsable.collapsed .drop-up {
+    display: none; }
+  body.vscode-dark .item:hover {
+    background-color: rgba(0, 0, 0, 0.25); }
+  body.vscode-dark .item.active {
+    background-color: #006FC5;
+    color: #282a36;
+    transition: 200ms ease-out; }
+    body.vscode-dark .item.active .name {
+      color: white; }
+    body.vscode-dark .item.active .exported {
+      background: #282a36;
+      color: white; }
+  body.vscode-dark .item .exported {
+    border-radius: 2px;
+    color: white;
+    background-color: dimgrey;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-dark .item .abstract {
+    border-radius: 2px;
+    color: lime;
+    background-color: transparent;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-dark .item .visibility {
+    border-radius: 2px;
+    padding: 2px 2px 2px 2px;
+    flex: 0 0 auto;
+    text-transform: uppercase; }
+  body.vscode-dark .item .visibility.public {
+    color: #43a047; }
+  body.vscode-dark .item .visibility.private {
+    color: #ef5350; }
+  body.vscode-dark .item .visibility.protected {
+    color: #ffb300; }
+  body.vscode-dark .item .type {
+    color: #8BE9FD; }
+  body.vscode-dark .item.variable {
+    color: #9e9e9e; }
+  body.vscode-dark .item.property {
+    color: #9e9e9e; }
+  body.vscode-dark .item.field {
+    color: #9e9e9e; }
+  body.vscode-dark .item.method {
+    color: white; }
+  body.vscode-dark .item.class {
+    color: white; }
+  body.vscode-dark .quick-open-entry-icon.method,
+  body.vscode-dark .quick-open-entry-icon.function,
+  body.vscode-dark .quick-open-entry-icon.constructor {
+    background-position: 0 -21px; }
+  body.vscode-dark .quick-open-entry-icon.field,
+  body.vscode-dark .quick-open-entry-icon.variable {
+    background-position: -20px -21px; }
+  body.vscode-dark .quick-open-entry-icon.class {
+    background-position: -41px -21px; }
+  body.vscode-dark .quick-open-entry-icon.interface {
+    background-position: -63px -22px; }
+  body.vscode-dark .quick-open-entry-icon.object,
+  body.vscode-dark .quick-open-entry-icon.namespace,
+  body.vscode-dark .quick-open-entry-icon.package,
+  body.vscode-dark .quick-open-entry-icon.module {
+    background-position: -82px -24px; }
+  body.vscode-dark .quick-open-entry-icon.property {
+    background-position: -102px -21px; }
+  body.vscode-dark .quick-open-entry-icon.key,
+  body.vscode-dark .quick-open-entry-icon.string {
+    background-position: -202px -23px; }
+  body.vscode-dark .quick-open-entry-icon.enum {
+    background-position: -122px -21px; }
+  body.vscode-dark .quick-open-entry-icon.rule {
+    background-position: -242px -24px; }
+  body.vscode-dark .quick-open-entry-icon.file {
+    background-position: -262px -24px; }
+  body.vscode-dark .quick-open-entry-icon.array {
+    background-position: -302px -24px; }
+  body.vscode-dark .quick-open-entry-icon.number {
+    background-position: -322px -24px; }
+  body.vscode-dark .quick-open-entry-icon.null,
+  body.vscode-dark .quick-open-entry-icon.boolean {
+    background-position: -342px -24px; }
+
+body.vscode-light {
+  background-color: transparent;
+  padding: 0; }
+  body.vscode-light .panel-top {
+    background-color: transparent; }
+    body.vscode-light .panel-top #search {
+      color: inherit;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      padding: 8px;
+      font-size: 100%;
+      flex: 1 1 auto; }
+    body.vscode-light .panel-top #collapseAll {
+      border-radius: 2px;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-left: 8px;
+      margin-right: 8px;
+      flex: 0 1 auto; }
+    body.vscode-light .panel-top #expandAll {
+      border-radius: 2px;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto; }
+    body.vscode-light .panel-top #filterActive {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto;
+      background-color: #f44336; }
+    body.vscode-light .panel-top .action {
+      cursor: pointer;
+      user-select: none;
+      background-color: transparent; }
+    body.vscode-light .panel-top .action:hover {
+      background-color: #006FC5;
+      color: white; }
+    body.vscode-light .panel-top .action:active {
+      background-color: #e91e63;
+      color: white; }
+  body.vscode-light .drop-down {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23646465' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-light .drop-down:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-light .drop-up {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23646465' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-light .drop-up:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-light .item.hidden {
+    display: none; }
+  body.vscode-light .item .collapse-action.hidden {
+    display: none; }
+  body.vscode-light .item.collapsable .drop-down {
+    display: none; }
+  body.vscode-light .item.collapsable .drop-up {
+    display: block; }
+  body.vscode-light .item.collapsable.collapsed .drop-down {
+    display: block; }
+  body.vscode-light .item.collapsable.collapsed .drop-up {
+    display: none; }
+  body.vscode-light .item:hover {
+    background-color: rgba(0, 0, 0, 0.25); }
+    body.vscode-light .item:hover .name {
+      color: black; }
+    body.vscode-light .item:hover .visibility {
+      background-color: white; }
+  body.vscode-light .item.active {
+    background-color: #006FC5;
+    color: #282a36;
+    transition: 200ms ease-out; }
+    body.vscode-light .item.active .name {
+      color: white; }
+    body.vscode-light .item.active .exported {
+      background: #282a36;
+      color: white; }
+    body.vscode-light .item.active .visibility {
+      background-color: white; }
+  body.vscode-light .item .exported {
+    border-radius: 2px;
+    color: white;
+    background-color: dimgrey;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-light .item .abstract {
+    border-radius: 2px;
+    color: lime;
+    background-color: transparent;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-light .item .visibility {
+    border-radius: 2px;
+    padding: 2px 2px 2px 2px;
+    flex: 0 0 auto;
+    text-transform: uppercase; }
+  body.vscode-light .item .visibility.public {
+    color: #43a047; }
+  body.vscode-light .item .visibility.private {
+    color: #ef5350; }
+  body.vscode-light .item .visibility.protected {
+    color: #ffb300; }
+  body.vscode-light .item .type {
+    color: #007ACC; }
+  body.vscode-light .item.variable {
+    color: #9e9e9e; }
+  body.vscode-light .item.property {
+    color: #9e9e9e; }
+  body.vscode-light .item.field {
+    color: #9e9e9e; }
+  body.vscode-light .item.method {
+    color: inherit; }
+  body.vscode-light .item.class {
+    color: inherit; }
+  body.vscode-light .quick-open-entry-icon.method,
+  body.vscode-light .quick-open-entry-icon.function,
+  body.vscode-light .quick-open-entry-icon.constructor {
+    background-position: 2px -2px; }
+  body.vscode-light .quick-open-entry-icon.field,
+  body.vscode-light .quick-open-entry-icon.variable {
+    background-position: -19px -2px; }
+  body.vscode-light .quick-open-entry-icon.class {
+    background-position: -39px -1px; }
+  body.vscode-light .quick-open-entry-icon.interface {
+    background-position: -61px -2px; }
+  body.vscode-light .quick-open-entry-icon.object,
+  body.vscode-light .quick-open-entry-icon.namespace,
+  body.vscode-light .quick-open-entry-icon.package,
+  body.vscode-light .quick-open-entry-icon.module {
+    background-position: -80px -2px; }
+  body.vscode-light .quick-open-entry-icon.property {
+    background-position: -100px -1px; }
+  body.vscode-light .quick-open-entry-icon.enum {
+    background-position: -120px -1px; }
+  body.vscode-light .quick-open-entry-icon.key,
+  body.vscode-light .quick-open-entry-icon.string {
+    background-position: -202px -3px; }
+  body.vscode-light .quick-open-entry-icon.rule {
+    background-position: -242px -4px; }
+  body.vscode-light .quick-open-entry-icon.file {
+    background-position: -262px -4px; }
+  body.vscode-light .quick-open-entry-icon.array {
+    background-position: -302px -4px; }
+  body.vscode-light .quick-open-entry-icon.number {
+    background-position: -322px -4px; }
+  body.vscode-light .quick-open-entry-icon.null,
+  body.vscode-light .quick-open-entry-icon.boolean {
+    background-position: -343px -4px; }
+
+body.vscode-high-contrast {
+  background-color: transparent;
+  padding: 0; }
+  body.vscode-high-contrast .panel-top {
+    background-color: transparent; }
+    body.vscode-high-contrast .panel-top #search {
+      color: white;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      padding: 8px;
+      font-size: 100%;
+      flex: 1 1 auto; }
+    body.vscode-high-contrast .panel-top #collapseAll {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-left: 8px;
+      margin-right: 8px;
+      flex: 0 1 auto; }
+    body.vscode-high-contrast .panel-top #expandAll {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto; }
+    body.vscode-high-contrast .panel-top #filterActive {
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      padding: 2px 4px 2px 4px;
+      margin-right: 8px;
+      flex: 0 0 auto;
+      background-color: #f44336; }
+    body.vscode-high-contrast .panel-top .action {
+      cursor: pointer;
+      user-select: none;
+      background-color: transparent; }
+    body.vscode-high-contrast .panel-top .action:hover {
+      background-color: #006FC5;
+      color: white; }
+    body.vscode-high-contrast .panel-top .action:active {
+      background-color: #e91e63;
+      color: white; }
+  body.vscode-high-contrast .drop-down {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-high-contrast .drop-down:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-high-contrast .drop-up {
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
+    display: none; }
+    body.vscode-high-contrast .drop-up:active {
+      background-color: rgba(0, 0, 0, 0.5); }
+  body.vscode-high-contrast .item.hidden {
+    display: none; }
+  body.vscode-high-contrast .item .collapse-action.hidden {
+    display: none; }
+  body.vscode-high-contrast .item.collapsable .drop-down {
+    display: none; }
+  body.vscode-high-contrast .item.collapsable .drop-up {
+    display: block; }
+  body.vscode-high-contrast .item.collapsable.collapsed .drop-down {
+    display: block; }
+  body.vscode-high-contrast .item.collapsable.collapsed .drop-up {
+    display: none; }
+  body.vscode-high-contrast .item:hover {
+    background-color: rgba(0, 0, 0, 0.25); }
+  body.vscode-high-contrast .item.active {
+    background-color: #006FC5;
+    color: #282a36;
+    transition: 200ms ease-out; }
+    body.vscode-high-contrast .item.active .name {
+      color: white; }
+    body.vscode-high-contrast .item.active .exported {
+      background: #282a36;
+      color: white; }
+  body.vscode-high-contrast .item .exported {
+    border-radius: 2px;
+    color: white;
+    background-color: dimgrey;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-high-contrast .item .abstract {
+    border-radius: 2px;
+    color: lime;
+    background-color: transparent;
+    font-size: 80%;
+    padding: 2px 4px 2px 4px;
+    margin-left: 8px;
+    flex: 0 1 auto; }
+  body.vscode-high-contrast .item .visibility {
+    border-radius: 2px;
+    padding: 2px 2px 2px 2px;
+    flex: 0 0 auto;
+    text-transform: uppercase; }
+  body.vscode-high-contrast .item .visibility.public {
+    color: #43a047; }
+  body.vscode-high-contrast .item .visibility.private {
+    color: #ef5350; }
+  body.vscode-high-contrast .item .visibility.protected {
+    color: #ffb300; }
+  body.vscode-high-contrast .item .type {
+    color: #8BE9FD; }
+  body.vscode-high-contrast .item.variable {
+    color: #9e9e9e; }
+  body.vscode-high-contrast .item.property {
+    color: #9e9e9e; }
+  body.vscode-high-contrast .item.field {
+    color: #9e9e9e; }
+  body.vscode-high-contrast .item.method {
+    color: white; }
+  body.vscode-high-contrast .item.class {
+    color: white; }
+  body.vscode-high-contrast .quick-open-entry-icon.method,
+  body.vscode-high-contrast .quick-open-entry-icon.function,
+  body.vscode-high-contrast .quick-open-entry-icon.constructor {
+    background-position: 0 -21px; }
+  body.vscode-high-contrast .quick-open-entry-icon.field,
+  body.vscode-high-contrast .quick-open-entry-icon.variable {
+    background-position: -20px -20px; }
+  body.vscode-high-contrast .quick-open-entry-icon.class {
+    background-position: -41px -21px; }
+  body.vscode-high-contrast .quick-open-entry-icon.interface {
+    background-position: -63px -22px; }
+  body.vscode-high-contrast .quick-open-entry-icon.object,
+  body.vscode-high-contrast .quick-open-entry-icon.namespace,
+  body.vscode-high-contrast .quick-open-entry-icon.package,
+  body.vscode-high-contrast .quick-open-entry-icon.module {
+    background-position: -82px -24px; }
+  body.vscode-high-contrast .quick-open-entry-icon.property {
+    background-position: -102px -21px; }
+  body.vscode-high-contrast .quick-open-entry-icon.key,
+  body.vscode-high-contrast .quick-open-entry-icon.string {
+    background-position: -202px -23px; }
+  body.vscode-high-contrast .quick-open-entry-icon.enum {
+    background-position: -122px -21px; }
+  body.vscode-high-contrast .quick-open-entry-icon.rule {
+    background-position: -242px -24px; }
+  body.vscode-high-contrast .quick-open-entry-icon.file {
+    background-position: -262px -24px; }
+  body.vscode-high-contrast .quick-open-entry-icon.array {
+    background-position: -302px -24px; }
+  body.vscode-high-contrast .quick-open-entry-icon.number {
+    background-position: -322px -24px; }
+  body.vscode-high-contrast .quick-open-entry-icon.null,
+  body.vscode-high-contrast .quick-open-entry-icon.boolean {
+    background-position: -342px -24px; }
+
+.hidden {
+  display: none; }
+
+.layout {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-content: stretch;
+  align-items: stretch;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0; }
+  .layout .panel-top {
+    z-index: 100;
+    box-shadow: 0px 1px 18px 1px rgba(0, 0, 0, 0.51);
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    flex: 0 0 auto; }
+  .layout .snippet {
+    flex: 1 1 auto;
+    overflow: auto;
+    padding-top: 16px; }
+
+div.snippet {
+  display: block; }
+
+div.root-declaration {
+  display: block; }
+
+div.root-declaration .child .item {
+  padding-left: 32px; }
+
+.child {
+  height: auto;
+  transition: 250ms ease-in-out;
+  overflow: hidden;
+  opacity: 1; }
+
+.item.collapsed + div.child {
+  height: 0px;
+  opacity: 0; }
+
+.item {
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  padding-left: 8px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 90%;
+  transition: 150ms ease-out;
+  min-height: 18px; }
+
+.item .icon {
+  height: 16px;
+  width: 16px;
+  background-position: 2px -1px;
+  display: inline-block;
+  background-color: transparent;
+  flex: 0 1 auto; }
+
+.item .name {
+  display: inline-block;
+  margin-left: 8px;
+  text-overflow: ellipsis;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  flex: 0 1 auto; }
+
+.item .visibility {
+  font-size: 80%;
+  margin-left: 8px;
+  flex: 0 1 auto; }
+
+.item .type {
+  font-size: 80%;
+  margin-left: 8px;
+  text-overflow: ellipsis;
+  min-width: 0;
+  overflow: hidden;
+  /* width: 100%; */
+  white-space: nowrap;
+  position: relative;
+  flex: 0 1 auto; }
+
+.collapse-action {
+  height: 18px;
+  width: 18px;
+  background-size: contain;
+  flex: 0 0 18px;
+  z-index: 1000;
+  position: relative;
+  margin-left: 8px;
+  border-radius: 50%; }

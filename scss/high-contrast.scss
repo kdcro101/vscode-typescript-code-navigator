@@ -1,0 +1,209 @@
+body.vscode-high-contrast {
+    background-color: transparent;
+    padding: 0;
+    .panel-top {
+        background-color: transparent;
+        #search {
+            color: white;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            padding: 8px;
+            font-size: 100%;
+            flex: 1 1 auto;
+        }
+        #collapseAll {
+            border-radius: 2px;
+            color: white;
+            font-size: 80%;
+            padding: 2px 4px 2px 4px;
+            margin-left: 8px;
+            margin-right: 8px;
+            flex: 0 1 auto;
+        }
+        #expandAll {
+            border-radius: 2px;
+            color: white;
+            font-size: 80%;
+            padding: 2px 4px 2px 4px;
+            margin-right: 8px;
+            flex: 0 0 auto;
+        }
+        #filterActive {
+            border-radius: 2px;
+            color: white;
+            font-size: 80%;
+            padding: 2px 4px 2px 4px;
+            margin-right: 8px;
+            flex: 0 0 auto;
+            background-color: #f44336;
+        }
+        .action {
+            cursor: pointer;
+            user-select: none;
+            background-color: transparent;
+        }
+        .action:hover {
+            background-color: #006FC5;
+            color: white;
+        }
+        .action:active {
+            background-color: #e91e63;
+            color: white;
+        }
+    }
+    .drop-down {
+        // background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23646465' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M6 4v8l4-4-4-4zm1 2.414L8.586 8 7 9.586V6.414z'/%3E%3C/svg%3E");
+        &:active {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        display: none;
+    }
+    .drop-up {
+        // background-image: url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjRkZGRkZGIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gICAgPHBhdGggZD0iTTcgMTRsNS01IDUgNXoiLz4gICAgPHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==);
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23E8E8E8' d='M11 10H5.344L11 4.414V10z'/%3E%3C/svg%3E");
+        &:active {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        display: none;
+    }
+    .item {
+        &.hidden {
+            display: none;
+        }
+        .collapse-action {
+            &.hidden {
+                display: none;
+            }
+        }
+        &.collapsable .drop-down {
+            display: none;
+        }
+        &.collapsable .drop-up {
+            display: block;
+        }
+        &.collapsable.collapsed {
+            .drop-down {
+                display: block;
+            }
+            .drop-up {
+                display: none;
+            }
+        }
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.25); // transform-origin: left center;
+            //     transform: scale3d(1.2,1.2,1);
+        }
+        &.active {
+            background-color: #006FC5;
+            color: #282a36;
+            transition: 200ms ease-out;
+            .name {
+                color: white;
+            }
+            .exported {
+                background: #282a36;
+                color: white;
+            }
+        }
+        .exported {
+            border-radius: 2px;
+            color: white;
+            background-color: dimgrey;
+            font-size: 80%;
+            padding: 2px 4px 2px 4px;
+            margin-left: 8px;
+            flex: 0 1 auto;
+        }
+        .abstract {
+            border-radius: 2px;
+            color: lime;
+            background-color: transparent;
+            font-size: 80%;
+            padding: 2px 4px 2px 4px;
+            margin-left: 8px;
+            flex: 0 1 auto;
+        }
+        .visibility {
+            border-radius: 2px;
+            padding: 2px 2px 2px 2px;
+            flex: 0 0 auto;
+            text-transform: uppercase;
+        }
+        .visibility.public {
+            color: #43a047;
+        }
+        .visibility.private {
+            color: #ef5350;
+        }
+        .visibility.protected {
+            color: #ffb300;
+        }
+        .type {
+            color: #8BE9FD;
+        }
+        &.variable {
+            color: #9e9e9e
+        }
+        &.property {
+            color: #9e9e9e;
+        }
+        &.field {
+            color: #9e9e9e;
+        }
+        &.method {
+            color: white;
+        }
+        &.class {
+            color: white;
+        }
+    }
+    .quick-open-entry-icon.method,
+    .quick-open-entry-icon.function,
+    .quick-open-entry-icon.constructor {
+        background-position: 0 -21px;
+    }
+    .quick-open-entry-icon.field,
+    .quick-open-entry-icon.variable {
+        background-position: -20px -20px;
+    }
+    .quick-open-entry-icon.class {
+        background-position: -41px -21px;
+    }
+    .quick-open-entry-icon.interface {
+        background-position: -63px -22px;
+    }
+    .quick-open-entry-icon.object,
+    .quick-open-entry-icon.namespace,
+    .quick-open-entry-icon.package,
+    .quick-open-entry-icon.module {
+        background-position: -82px -24px;
+    }
+    .quick-open-entry-icon.property {
+        background-position: -102px -21px;
+    }
+    .quick-open-entry-icon.key,
+    .quick-open-entry-icon.string {
+        background-position: -202px -23px;
+    }
+    .quick-open-entry-icon.enum {
+        background-position: -122px -21px;
+    }
+    .quick-open-entry-icon.rule {
+        background-position: -242px -24px;
+    }
+    .quick-open-entry-icon.file {
+        background-position: -262px -24px;
+    }
+    .quick-open-entry-icon.array {
+        background-position: -302px -24px;
+    }
+    .quick-open-entry-icon.number {
+        background-position: -322px -24px;
+    }
+    .quick-open-entry-icon.null,
+    .quick-open-entry-icon.boolean {
+        background-position: -342px -24px;
+    }
+}

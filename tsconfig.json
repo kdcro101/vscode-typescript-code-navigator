@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es2015",
+        "outDir": "out",
+        "lib": [
+            "es2017",
+            "dom"
+        ],
+        "sourceMap": true,
+        "rootDir": "src"
+    },
+    "exclude": [
+        "node_modules",
+        "embedded"
+    ]
+}
