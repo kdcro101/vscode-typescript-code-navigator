@@ -22,7 +22,7 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 
 ## Usage
 
-To open panel pres CTRL+P (Show all commands) and select `Show Typescript code navigator`
+To open panel press CTRL+P (Show all commands) and select `Show Typescript code navigator`
 
 
 ## LICENSE

@@ -2,7 +2,7 @@
     "name": "typescript-code-navigator",
     "displayName": "Typescript code navigator",
     "description": "Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "kdcro101",
     "icon": "icon/icon.png",
     "galleryBanner": {
@@ -27,31 +27,35 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [{
-            "command": "extension.showTypescriptMembers",
-            "title": "Show Typescript code navigator"
-        }],
-        "configuration": [{
-            "title": "vscode-typescript-navigator-settings",
-            "type": "object",
-            "properties": {
-                "typescript.navigator.collapseEnums": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse enums"
-                },
-                "typescript.navigator.collapseInterfaces": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse interfaces"
-                },
-                "typescript.navigator.collapseClasses": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should collapse classes"
+        "commands": [
+            {
+                "command": "extension.showTypescriptMembers",
+                "title": "Show Typescript code navigator"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "vscode-typescript-navigator-settings",
+                "type": "object",
+                "properties": {
+                    "typescript.navigator.collapseEnums": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse enums"
+                    },
+                    "typescript.navigator.collapseInterfaces": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse interfaces"
+                    },
+                    "typescript.navigator.collapseClasses": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Should collapse classes"
+                    }
                 }
             }
-        }]
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
