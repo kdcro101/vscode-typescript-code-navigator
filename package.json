@@ -9,8 +9,7 @@
         "theme": "dark"
     },
     "bugs": {
-        "url": "https://github.com/kdcro101/vscode-typescript-navigator/issues",
-        "email": "egamma@microsoft.com"
+        "url": "https://github.com/kdcro101/vscode-typescript-navigator/issues"
     },
     "repository": {
         "type": "git",
@@ -37,18 +36,18 @@
             "type": "object",
             "properties": {
                 "typescript.navigator.collapseEnums": {
-                    "type":"boolean",
-                    "default":true,
+                    "type": "boolean",
+                    "default": true,
                     "description": "Should collapse enums"
                 },
                 "typescript.navigator.collapseInterfaces": {
-                    "type":"boolean",
-                    "default":true,
+                    "type": "boolean",
+                    "default": true,
                     "description": "Should collapse interfaces"
                 },
                 "typescript.navigator.collapseClasses": {
-                    "type":"boolean",
-                    "default":false,
+                    "type": "boolean",
+                    "default": false,
                     "description": "Should collapse classes"
                 }
             }

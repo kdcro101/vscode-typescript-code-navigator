@@ -14,10 +14,10 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 `typescript.navigator.collapseEnums` : `boolean`
  - should collapse enum declarations when populating panel, `default = true`
 
-`typescript.navigator.collapseInterfaces`
+`typescript.navigator.collapseInterfaces`: `boolean`
 - should collapse interface declarations when populating panel, `default = true`
 
-`typescript.navigator.collapseClasses`
+`typescript.navigator.collapseClasses`: `boolean`
 - should collapse class declarations when populating panel, `default = false`
 
 ## Usage
