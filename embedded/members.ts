@@ -5,12 +5,13 @@ declare var vscode: any;
 declare var documentId: string;
 declare var documentStatesRaw: string;
 declare var documentStates: DocumentStateItem[];
+declare var markInstance: any;
 
 let lastActivatedItem: HTMLDivElement = null;
 
 window.addEventListener("message", (event) => {
     const message = event.data; // The JSON data our extension sent
-    console.log("onMessage=", message);
+    // console.log("onMessage=", message);
 });
 
 function runMessage(uri: string, s: number, e: number) {
@@ -45,7 +46,10 @@ function setupItemListeners() {
     }
 
     const searchElement: HTMLInputElement = document.getElementById("search") as HTMLInputElement;
-    searchElement.addEventListener("keyup", () => { filterItems(searchElement.value); });
+    searchElement.addEventListener("keyup", () => {
+        // console.log("keyup");
+        markItems(searchElement.value);
+    });
 
     document.addEventListener("mouseup", () => {
         if (lastActivatedItem != null) {
@@ -61,7 +65,7 @@ function onItemRelease(e: Event) {
 }
 function onItemClick(e: Event) {
 
-    console.log("onItemClick");
+    // console.log("onItemClick");
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -71,7 +75,7 @@ function onItemClick(e: Event) {
     const uri = decodeURIComponent(element.getAttribute("uri"));
     const start = parseInt(element.getAttribute("start"), 10);
     const end = parseInt(element.getAttribute("end"), 10);
-    console.log(`item=${uri} ${start} ${end}`);
+    // console.log(`item=${uri} ${start} ${end}`);
 
     element.classList.add("active");
     lastActivatedItem = element as HTMLDivElement;
@@ -80,14 +84,14 @@ function onItemClick(e: Event) {
 }
 function onCollapseAction(e: Event) {
 
-    console.log("onCollapseAction");
+    // console.log("onCollapseAction");
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
 
     const element = this;
     const collapse = element.getAttribute("collapse");
-    console.log(`click => ${collapse}`);
+    // console.log(`click => ${collapse}`);
     e.preventDefault();
     e.stopImmediatePropagation();
     e.stopPropagation();
@@ -95,7 +99,7 @@ function onCollapseAction(e: Event) {
 }
 
 function toggleCollapse(childId: string) {
-    console.log(`toggling ${childId}`);
+    // console.log(`toggling ${childId}`);
     const parent: HTMLDivElement = document.getElementById(`parent_${childId}`) as HTMLDivElement;
 
     if (parent == null) {
@@ -164,13 +168,12 @@ function filterItems(val: string) {
         filterIndicator.classList.remove("hidden");
     }
 
-    console.log(`filtering ${val}`);
+    // console.log(`filtering ${val}`);
     const items = document.querySelectorAll("div.item");
     for (let i = 0; i < items.length; i++) {
         const e: HTMLDivElement = items.item(i) as HTMLDivElement;
         const nameElement: HTMLDivElement = e.getElementsByClassName("name")[0] as HTMLDivElement;
         if (nameElement == null) {
-            console.log(`name ois null`);
             continue;
         }
         const text = nameElement.innerText != null ? nameElement.innerText : "";
@@ -185,7 +188,11 @@ function filterItems(val: string) {
     }
 
 }
-
+function markItems(val: string) {
+    // console.log(`marking: ${val}`);
+    markInstance.unmark();
+    markInstance.mark(val);
+}
 function collapseAll() {
     const items = document.querySelectorAll("div.item");
     for (let i = 0; i < items.length; i++) {
@@ -206,6 +213,31 @@ function expandAll() {
 function focusBackToEditor() {
     const o: WebviewMessage<any> = {
         command: "focusEditor",
+        data: null,
+    };
+
+    vscode.postMessage(o);
+}
+
+function toggleShowIcons() {
+    const o: WebviewMessage<any> = {
+        command: "toggleShowIcons",
+        data: null,
+    };
+
+    vscode.postMessage(o);
+}
+function toggleShowVisibility() {
+    const o: WebviewMessage<any> = {
+        command: "toggleShowVisibility",
+        data: null,
+    };
+
+    vscode.postMessage(o);
+}
+function toggleShowDataTypes() {
+    const o: WebviewMessage<any> = {
+        command: "toggleShowDataTypes",
         data: null,
     };
 

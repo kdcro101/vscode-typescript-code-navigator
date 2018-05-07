@@ -1,6 +1,27 @@
 body.vscode-light {
     background-color: transparent;
     padding: 0;
+    .panel-bottom {
+        padding: 8px;
+        border-top: 1px solid rgba($color: #000000, $alpha: 0.125);
+        .action {
+            cursor: pointer;
+            user-select: none;
+            background-color: transparent;
+            padding: 2px 4px 2px 4px;
+            font-size: 80%;
+            margin-right: 8px;
+            border-radius: 2px;
+            &.enabled {
+                background-color: #006FC5;
+                color: white;
+            }
+        }
+        .action:active {
+            background-color: #e91e63;
+            color: white;
+        }
+    }
     .panel-top {
         background-color: transparent;
         #search {
@@ -13,8 +34,7 @@ body.vscode-light {
             flex: 1 1 auto;
         }
         #collapseAll {
-            border-radius: 2px;
-            // color: inherit;
+            border-radius: 2px; // color: inherit;
             font-size: 80%;
             padding: 2px 4px 2px 4px;
             margin-left: 8px;
@@ -22,8 +42,7 @@ body.vscode-light {
             flex: 0 1 auto;
         }
         #expandAll {
-            border-radius: 2px;
-            // color: inherit;
+            border-radius: 2px; // color: inherit;
             font-size: 80%;
             padding: 2px 4px 2px 4px;
             margin-right: 8px;

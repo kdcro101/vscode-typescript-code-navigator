@@ -22,6 +22,10 @@ import { CompilerConfig } from "./compiler";
 // vscode.workspace.getConfiguration("root");
 
 export class ContentParser {
+
+    private static jsEmbedded: string = null;
+    private static cssEmbedded: string = null;
+
     public parser = new TypescriptParser();
     public parsed: File = null;
     public textData: string = null;
@@ -31,6 +35,9 @@ export class ContentParser {
     private collapseEnums: boolean = false;
     private collapseInterfaces: boolean = false;
     private collapseClasses: boolean = false;
+    private showVisibility: boolean = false;
+    private showIcons: boolean = false;
+    private showDataTypes: boolean = false;
 
     private compilerConfig: CompilerConfig = null;
 
@@ -48,11 +55,15 @@ export class ContentParser {
         this.collapseInterfaces = config.get("typescript.navigator.collapseInterfaces");
         this.collapseClasses = config.get("typescript.navigator.collapseClasses");
 
+        this.showVisibility = config.get("typescript.navigator.showVisibilityLabels");
+        this.showIcons = config.get("typescript.navigator.showIcons");
+        this.showDataTypes = config.get("typescript.navigator.showDataTypes");
     }
     public generateHtml(): Promise<string> {
         return new Promise((resolve, reject) => {
 
             const d = this.documentToParse;
+            console.log(`generateHtml ${d.uri.fsPath}`);
 
             if (d == null) {
                 resolve("");
@@ -61,8 +72,10 @@ export class ContentParser {
 
             // this.compilerConfig = new CompilerConfig(d.uri);
 
-            return this.parser.parseSource(d.getText())
-                .then((parsed: File) => {
+            return this.loadResources()
+                .then(() => {
+                    return this.parser.parseSource(d.getText());
+                }).then((parsed: File) => {
                     return this.renderData(parsed);
                 }).then((html) => {
                     resolve(html);
@@ -72,37 +85,48 @@ export class ContentParser {
                 });
         });
     }
-    public renderData(data: File): Promise<string> {
+    public loadResources(): Promise<void> {
         return new Promise((resolve, reject) => {
-            console.log(data);
 
-            let css: string = "";
-            let js: string = "";
-            let listjs: string = "";
-            const iconsPath = "vscode-resource:" + this.context.extensionPath + "/svg/symbol-sprite.svg";
-            // const iconsPath = "vscode-resource:/symbol-sprite.svg";
+            if (ContentParser.jsEmbedded != null && ContentParser.cssEmbedded != null) {
+                resolve();
+                return;
+            }
 
             Promise.all([
                 fs.readFile(this.context.extensionPath + "/css/index.css"),
                 fs.readFile(this.context.extensionPath + "/out/embedded/members.js"),
-                fs.readFile(this.context.extensionPath + "/vendor/list.js"),
+                fs.readFile(this.context.extensionPath + "/vendor/mark.min.js"),
             ]).then((results) => {
+                const css = results[0];
+                const js1 = results[1];
+                const js2 = results[2];
+                ContentParser.jsEmbedded = `${js1}\n${js2}`;
+                ContentParser.cssEmbedded = `${css}`;
 
-                css = results[0].toString();
-                js = results[1].toString();
-                listjs = results[2].toString();
+                resolve();
 
-                return this.buildElements(data);
-            }).then((elements) => {
-                resolve(`
+            });
+        });
+    }
+    public renderData(data: File): Promise<string> {
+        return new Promise((resolve, reject) => {
+            console.log(data);
+
+            const iconsPath = "vscode-resource:" + this.context.extensionPath + "/svg/symbol-sprite.svg";
+            // const iconsPath = "vscode-resource:/symbol-sprite.svg";
+            // var documentStatesRaw='${JSON.stringify(this.docState)}';
+            // var documentStates= JSON.parse(documentStatesRaw);
+
+            Promise.all([])
+                .then((results) => {
+                    return this.buildElements(data);
+                }).then((elements) => {
+                    resolve(`
                         <script>
                         var vscode = acquireVsCodeApi();
                         var documentId = '${this.documentToParse.uri.fsPath}';
-                        var documentStatesRaw='${JSON.stringify(this.docState)}';
-                        var documentStates= JSON.parse(documentStatesRaw);
-
-                        ${listjs}
-                        ${js}
+                        ${ContentParser.jsEmbedded}
                         </script>
                         <style>
                             div.snippet .list{
@@ -116,11 +140,11 @@ export class ContentParser {
 	                            background-image: url("${iconsPath}");
 	                            background-repeat: no-repeat;
                             }
-				            ${css}
+				            ${ContentParser.cssEmbedded}
 				        </style>
                         <div class="layout">
                             <div class="panel-top">
-                                <input id="search" class="search" placeholder="Filter..." />
+                                <input id="search" class="search" placeholder="Highlight..." />
                                 <div id="filterActive" class="hidden">Filter active</div>
                                 <div id="collapseAll" class="action" onclick="collapseAll()">Collapse all</div>
                                 <div id="expandAll" class="action" onclick="expandAll()">Expand all</div>
@@ -130,19 +154,24 @@ export class ContentParser {
                                 ${elements}
                                 </div>
                             </div>
+                            <div class="panel-bottom">
+                                <div id="showVisibility" class="action ${ this.showVisibility === true ? "enabled" : ""}"
+                                     onclick="toggleShowVisibility()">VISIBILITY</div>
+                                <div id="showIcons" class="action ${ this.showIcons === true ? "enabled" : ""}"
+                                     onclick="toggleShowIcons()">ICONS</div>
+                                <div id="showDataTypes" class="action ${ this.showDataTypes === true ? "enabled" : ""}"
+                                    onclick="toggleShowDataTypes()">TYPES</div>
+                            </div>
                         </div>
                         <script>
-                                var options = {
-                                    valueNames: [ 'name' ]
-                                };
-                                var userList = new List("snippet", options);
+                                var markInstance = new Mark(document.querySelectorAll("div.item .name, div.item .type"));
                                 setupItemListeners();
                         </script>
                     `);
-            }).catch((e) => {
-                console.log(e);
-                reject(e);
-            });
+                }).catch((e) => {
+                    console.log(e);
+                    reject(e);
+                });
 
         });
     }
@@ -339,22 +368,27 @@ export class ContentParser {
         isCollapsed?: boolean,
     ): string {
 
+        const showVisibility = this.showVisibility === true ? true : false;
+        const showDataTypes = this.showDataTypes === true ? true : false;
+
         const o = `
             <div id="parent_${collapseId}" name="${name}" class="item
             ${collapseId == null ? "" : "collapsable"}
             ${isCollapsed === true ? "collapsed" : ""}
             ${context}" uri="${encodeURIComponent(this.documentToParse.uri.toString())}"
             start="${positionStart}" end="${positionEnd}">
-                <div class="icon quick-open-entry-icon ${context}"></div>
-                <div class="visibility private ${visibility === "private" ? "" : "hidden"}">pri</div>
-                <div class="visibility public ${visibility === "public" ? "" : "hidden"}">pub</div>
-                <div class="visibility protected ${visibility === "protected" ? "" : "hidden"}">pro</div>
+                <div class="collapse-wrapper">
+                    <div class="collapse-action drop-down ${collapseId == null ? "hidden" : ""}" collapse="${collapseId}"></div>
+                    <div class="collapse-action drop-up ${collapseId == null ? "hidden" : ""}" collapse="${collapseId}"></div>
+                </div>
+                <div class="icon quick-open-entry-icon ${context} ${this.showIcons === true ? "" : "hidden"}"></div>
+                <div class="visibility private ${visibility === "private" && showVisibility ? "" : "hidden"}">pri</div>
+                <div class="visibility public ${visibility === "public" && showVisibility ? "" : "hidden"}">pub</div>
+                <div class="visibility protected ${visibility === "protected" && showVisibility ? "" : "hidden"}">pro</div>
                 <div class="name">${name}</div>
-                <div class="type ${dataType == null ? "hidden" : ""}">${dataType}</div>
+                <div class="type ${dataType != null && showDataTypes === true ? "" : "hidden"}">${dataType}</div>
                 <div class="abstract ${abstract === true ? "" : "hidden"}">abstract</div>
                 <div class="exported ${exported === false ? "hidden" : ""}">exported</div>
-                <div class="collapse-action drop-down ${collapseId == null ? "hidden" : ""}" collapse="${collapseId}"></div>
-                <div class="collapse-action drop-up ${collapseId == null ? "hidden" : ""}" collapse="${collapseId}"></div>
            </div>`;
 
         return o;

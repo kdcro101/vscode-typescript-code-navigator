@@ -2,7 +2,12 @@
 @import "./light";
 @import "./high-contrast";
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+mark {
+    background: orange;
+    color: black;
 }
 
 .layout {
@@ -21,7 +26,14 @@
     bottom: 0;
     .panel-top {
         z-index: 100;
-        box-shadow: 0px 1px 18px 1px rgba(0, 0, 0, 0.51);
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        flex: 0 0 auto;
+    }
+    .panel-bottom {
+        z-index: 100;
         display: flex;
         flex-direction: row;
         align-content: center;
@@ -81,11 +93,11 @@ div.root-declaration .child .item {
     display: inline-block;
     background-color: transparent;
     flex: 0 1 auto;
+    margin-right: 8px;
 }
 
 .item .name {
-    display: inline-block;
-    margin-left: 8px;
+    display: inline-block; // margin-left: 8px;
     text-overflow: ellipsis;
     min-width: 0;
     overflow: hidden;
@@ -96,7 +108,7 @@ div.root-declaration .child .item {
 
 .item .visibility {
     font-size: 80%;
-    margin-left: 8px;
+    margin-right: 8px;
     flex: 0 1 auto;
 }
 
@@ -112,13 +124,17 @@ div.root-declaration .child .item {
     flex: 0 1 auto;
 }
 
-.collapse-action {
+.collapse-wrapper {
     height: 18px;
     width: 18px;
-    background-size: contain;
     flex: 0 0 18px;
     z-index: 1000;
-    position: relative;
-    margin-left: 8px;
-    border-radius: 50%;
+    margin-right: 8px;
+    .collapse-action {
+        height: 18px;
+        width: 18px;
+        background-size: contain;
+        position: relative;
+        border-radius: 50%;
+    }
 }

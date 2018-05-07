@@ -1,5 +1,5 @@
 import * as path from "path";
-import { Subject } from "rxjs";
+import { merge as observableMerge, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, filter, map, tap } from "rxjs/operators";
 import * as vscode from "vscode";
 
@@ -25,8 +25,12 @@ export class EditorMonitor {
     public lastUri: vscode.Uri = null;
     public lastFsPath: string = null;
     public lastHtml: string = null;
+
+    public lastDocumentActionable: vscode.TextDocument = null;
+    public lastDocumentFocusable: vscode.TextDocument = null;
     private panel: vscode.WebviewPanel = null;
-    private diposableMessage: vscode.Disposable = null;
+    private disposablePanelMessage: vscode.Disposable = null;
+    private disposablePanelViewState: vscode.Disposable = null;
 
     private memo: DocumentMemory = {};
 
@@ -55,17 +59,23 @@ export class EditorMonitor {
             delete this.memo[id];
         });
 
-        this.eventChangeConfiguration.pipe(
-            filter(() => vscode.window.activeTextEditor != null),
-            filter(() => vscode.window.activeTextEditor.document != null),
-            filter(() => vscode.window.activeTextEditor.document.languageId === "typescript"),
-            map<any, vscode.TextDocument>(() => vscode.window.activeTextEditor.document),
-        ).subscribe((d) => this.eventDocumentUpdate.next(d));
+        // this.eventChangeConfiguration.pipe(
+        //     filter(() => vscode.window.activeTextEditor != null),
+        //     filter(() => vscode.window.activeTextEditor.document != null),
+        //     filter(() => vscode.window.activeTextEditor.document.languageId === "typescript"),
+        //     map<any, vscode.TextDocument>(() => vscode.window.activeTextEditor.document),
+        // ).subscribe((d) => this.eventDocumentUpdate.next(d));
+
+        observableMerge(
+            this.eventChangeActiveTextEditor.pipe(filter((d) => d != null && d.document != null && d.document.languageId !== "typescript")),
+            // this.eventChangeActiveTextEditor.pipe(filter((d) => d == null)),
+        ).pipe(
+            map<vscode.TextEditor, vscode.TextDocument>((d) => d != null && d.document != null ? d.document : null),
+        ).subscribe((d) => this.updatePanelNotTypescript(d));
 
         this.eventChangeActiveTextEditor.pipe(
             filter((d) => d != null && d.document != null),
-            filter((d) => d.document.languageId !== "typescript"),
-        ).subscribe((d) => this.updatePanelNotTypescript(d.document));
+        ).subscribe((d) => this.lastDocumentFocusable = d.document);
 
         this.eventChangeActiveTextEditor.pipe(
             filter((d) => d != null && d.document != null),
@@ -85,6 +95,7 @@ export class EditorMonitor {
 
         this.eventChangeTextDocument.pipe(
             filter((d) => d != null && d.document != null),
+            filter((d) => d.document.languageId === "typescript"),
             debounceTime(500),
         ).subscribe((d) => this.eventDocumentUpdate.next(d.document));
 
@@ -95,11 +106,25 @@ export class EditorMonitor {
                     this.memo[documentId] = [];
                 }
             }),
+            tap((d) => this.lastDocumentActionable = d),
         ).subscribe((d) => this.updatePanel(d));
 
         this.eventMessage.pipe(
             filter((d) => d.command === "toggleState"),
         ).subscribe((d) => this.saveCollapseState(d));
+
+        this.eventMessage.pipe(
+            filter((d) => d.command === "toggleShowIcons"),
+        ).subscribe((d) => this.toggleShowIcons());
+
+        this.eventMessage.pipe(
+            filter((d) => d.command === "toggleShowVisibility"),
+        ).subscribe((d) => this.toggleShowVisibility());
+
+        this.eventMessage.pipe(
+            filter((d) => d.command === "toggleShowDataTypes"),
+        ).subscribe((d) => this.toggleShowDataTypes());
+
         this.eventMessage.pipe(
             filter((d) => d.command === "focusEditor"),
             filter(() => this.lastUri != null),
@@ -109,6 +134,7 @@ export class EditorMonitor {
 
     }
     public updatePanel(d: vscode.TextDocument) {
+        console.log(`updatePanel ${d.uri.fsPath}`);
         const data = this.memo[d.uri.fsPath];
 
         const parser = new ContentParser(this.context, d, data);
@@ -124,29 +150,23 @@ export class EditorMonitor {
 
     }
     public updatePanelNotTypescript(d: vscode.TextDocument) {
-        const data = this.memo[d.uri.fsPath];
-
-        const parser = new ContentParser(this.context, d, data);
-        this.panel.title = path.basename(d.uri.fsPath);
-
-        this.panel.webview.html = `
-                <style>
-                    .error{
-                        padding:16px;
-                        color:red;
-                    }
-                </style>
-                <div class="error">Opened document is not typescript file</div>
-        `;
-
+        if (d != null) {
+            this.panel.title = path.basename(d.uri.fsPath);
+        } else {
+            this.panel.title = "-";
+        }
+        this.panel.webview.html = ``;
     }
     public setPanel(val: vscode.WebviewPanel) {
         this.panel = val;
         const ae = vscode.window.activeTextEditor;
 
         if (val == null) {
-            if (this.diposableMessage != null) {
-                this.diposableMessage.dispose();
+            if (this.disposablePanelMessage != null) {
+                this.disposablePanelMessage.dispose();
+            }
+            if (this.disposablePanelViewState != null) {
+                this.disposablePanelViewState.dispose();
             }
             return;
         }
@@ -154,7 +174,13 @@ export class EditorMonitor {
         if (val != null && ae != null) {
             this.eventDocumentUpdate.next(ae.document);
         }
-        this.diposableMessage = this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => this.eventMessage.next(m));
+        this.disposablePanelMessage = this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => this.eventMessage.next(m));
+        // this.disposablePanelViewState = this.panel.onDidChangeViewState((e) => {
+        //     console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
+        //     if (e.webviewPanel.visible === true) {
+        //         vscode.window.showTextDocument(this.lastDocumentFocusable);
+        //     }
+        // });
     }
     public saveCollapseState(m: WebviewMessage<MessageCollapseStateData>) {
 
@@ -174,5 +200,45 @@ export class EditorMonitor {
         data.push(o);
         this.memo[m.data.document_id] = data;
         return;
+    }
+
+    private toggleShowIcons() {
+        const config = vscode.workspace.getConfiguration();
+
+        const current = config.get("typescript.navigator.showIcons");
+        const next = !current;
+        config.update("typescript.navigator.showIcons", next)
+            .then((result) => {
+                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
+                // vscode.window.showTextDocument(this.lastDocumentActionable);
+                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+            });
+
+    }
+    private toggleShowVisibility() {
+        const config = vscode.workspace.getConfiguration();
+
+        const current = config.get("typescript.navigator.showVisibilityLabels");
+        const next = !current;
+        config.update("typescript.navigator.showVisibilityLabels", next)
+            .then((result) => {
+                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
+                // vscode.window.showTextDocument(this.lastDocumentActionable);
+                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+            });
+
+    }
+    private toggleShowDataTypes() {
+        const config = vscode.workspace.getConfiguration();
+
+        const current = config.get("typescript.navigator.showDataTypes");
+        const next = !current;
+        config.update("typescript.navigator.showDataTypes", next)
+            .then((result) => {
+                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
+                // vscode.window.showTextDocument(this.lastDocumentActionable);
+                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+            });
+
     }
 }

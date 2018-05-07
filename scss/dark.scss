@@ -1,8 +1,30 @@
 body.vscode-dark {
     background-color: transparent;
     padding: 0;
+    .panel-bottom {
+        padding: 8px;
+        border-top: 1px solid rgba($color: #ffffff, $alpha: 0.125);
+        .action {
+            cursor: pointer;
+            user-select: none;
+            background-color: transparent;
+            padding: 2px 4px 2px 4px;
+            font-size: 80%;
+            margin-right: 8px;
+            border-radius: 2px;
+            &.enabled {
+                background-color: #006FC5;
+                color: white;
+            }
+        }
+        .action:active {
+            background-color: #e91e63;
+            color: white;
+        }
+    }
     .panel-top {
         background-color: transparent;
+        border-bottom: 1px solid rgba($color: #ffffff, $alpha: 0.125);
         #search {
             color: white;
             background-color: transparent;
