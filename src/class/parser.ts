@@ -1,4 +1,5 @@
 import * as fs from "fs-extra";
+
 import * as ts from "typescript";
 
 import * as _ from "lodash";
@@ -58,6 +59,7 @@ export class ContentParser {
         this.showVisibility = config.get("typescript.navigator.showVisibilityLabels");
         this.showIcons = config.get("typescript.navigator.showIcons");
         this.showDataTypes = config.get("typescript.navigator.showDataTypes");
+
     }
     public generateHtml(): Promise<string> {
         return new Promise((resolve, reject) => {
@@ -74,7 +76,9 @@ export class ContentParser {
 
             return this.loadResources()
                 .then(() => {
-                    return this.parser.parseSource(d.getText());
+                    // return this.parser.parseSource(d.getText());
+                    const root = vscode.workspace.getWorkspaceFolder(this.documentToParse.uri);
+                    return this.parser.parseFile(d.uri.fsPath, root.uri.fsPath);
                 }).then((parsed: File) => {
                     return this.renderData(parsed);
                 }).then((html) => {

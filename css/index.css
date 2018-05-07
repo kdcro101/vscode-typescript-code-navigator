@@ -1,5 +1,6 @@
 body.vscode-dark {
   background-color: transparent;
+  cursor: pointer;
   padding: 0; }
   body.vscode-dark .panel-bottom {
     padding: 8px;
@@ -171,7 +172,8 @@ body.vscode-dark {
 
 body.vscode-light {
   background-color: transparent;
-  padding: 0; }
+  padding: 0;
+  cursor: pointer; }
   body.vscode-light .panel-bottom {
     padding: 8px;
     border-top: 1px solid rgba(0, 0, 0, 0.125); }
@@ -345,7 +347,25 @@ body.vscode-light {
 
 body.vscode-high-contrast {
   background-color: transparent;
-  padding: 0; }
+  padding: 0;
+  cursor: pointer; }
+  body.vscode-high-contrast .panel-bottom {
+    padding: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.125); }
+    body.vscode-high-contrast .panel-bottom .action {
+      cursor: pointer;
+      user-select: none;
+      background-color: transparent;
+      padding: 2px 4px 2px 4px;
+      font-size: 80%;
+      margin-right: 8px;
+      border-radius: 2px; }
+      body.vscode-high-contrast .panel-bottom .action.enabled {
+        background-color: #006FC5;
+        color: white; }
+    body.vscode-high-contrast .panel-bottom .action:active {
+      background-color: #e91e63;
+      color: white; }
   body.vscode-high-contrast .panel-top {
     background-color: transparent; }
     body.vscode-high-contrast .panel-top #search {
@@ -553,8 +573,6 @@ mark {
   color: black; }
 
 .layout {
-  display: -ms-flexbox;
-  display: -webkit-flex;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
@@ -583,7 +601,8 @@ mark {
   .layout .snippet {
     flex: 1 1 auto;
     overflow: auto;
-    padding-top: 16px; }
+    padding-top: 16px;
+    padding-bottom: 32px; }
 
 div.snippet {
   display: block; }

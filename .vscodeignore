@@ -4,6 +4,7 @@ out/test/**
 test/**
 src/**
 embedded/**
+preview/**
 media/**
 scss/**
 **/*.map

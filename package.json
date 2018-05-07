@@ -2,7 +2,7 @@
     "name": "typescript-code-navigator",
     "displayName": "Code navigator for typescript",
     "description": "Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "kdcro101",
     "icon": "icon/icon.png",
     "galleryBanner": {
@@ -27,46 +27,50 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [{
-            "command": "extension.showTypescriptMembers",
-            "title": "Show Typescript code navigator"
-        }],
-        "configuration": [{
-            "title": "vscode-typescript-navigator-settings",
-            "type": "object",
-            "properties": {
-                "typescript.navigator.collapseEnums": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse enums"
-                },
-                "typescript.navigator.collapseInterfaces": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse interfaces"
-                },
-                "typescript.navigator.collapseClasses": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should collapse classes"
-                },
-                "typescript.navigator.showVisibilityLabels": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show visibility label"
-                },
-                "typescript.navigator.showIcons": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show icons"
-                },
-                "typescript.navigator.showDataTypes": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show data type"
+        "commands": [
+            {
+                "command": "extension.showTypescriptMembers",
+                "title": "Show Typescript code navigator"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "vscode-typescript-navigator-settings",
+                "type": "object",
+                "properties": {
+                    "typescript.navigator.collapseEnums": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse enums"
+                    },
+                    "typescript.navigator.collapseInterfaces": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse interfaces"
+                    },
+                    "typescript.navigator.collapseClasses": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Should collapse classes"
+                    },
+                    "typescript.navigator.showVisibilityLabels": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show visibility label"
+                    },
+                    "typescript.navigator.showIcons": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show icons"
+                    },
+                    "typescript.navigator.showDataTypes": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show data type"
+                    }
                 }
             }
-        }]
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
@@ -85,6 +89,7 @@
         "fs-extra": "^6.0.0",
         "rxjs": "^6.1.0",
         "sass": "^1.3.2",
+        "ts-file-parser": "git+https://github.com/kdcro101/ts-structure-parser.git",
         "typescript-parser": "^2.4.0"
     }
 }
