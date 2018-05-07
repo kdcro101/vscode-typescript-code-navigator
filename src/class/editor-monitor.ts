@@ -59,12 +59,12 @@ export class EditorMonitor {
             delete this.memo[id];
         });
 
-        // this.eventChangeConfiguration.pipe(
-        //     filter(() => vscode.window.activeTextEditor != null),
-        //     filter(() => vscode.window.activeTextEditor.document != null),
-        //     filter(() => vscode.window.activeTextEditor.document.languageId === "typescript"),
-        //     map<any, vscode.TextDocument>(() => vscode.window.activeTextEditor.document),
-        // ).subscribe((d) => this.eventDocumentUpdate.next(d));
+        this.eventChangeConfiguration.pipe(
+            // filter(() => vscode.window.activeTextEditor != null),
+            // filter(() => vscode.window.activeTextEditor.document != null),
+            // filter(() => vscode.window.activeTextEditor.document.languageId === "typescript"),
+            // map<any, vscode.TextDocument>(() => vscode.window.activeTextEditor.document),
+        ).subscribe((d) => this.eventDocumentUpdate.next(this.lastDocumentActionable));
 
         observableMerge(
             this.eventChangeActiveTextEditor.pipe(filter((d) => d != null && d.document != null && d.document.languageId !== "typescript")),
@@ -211,7 +211,13 @@ export class EditorMonitor {
             .then((result) => {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
-                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                const m: WebviewMessage<any> = {
+                    command: "toggleShowIconsDone",
+                    data: null,
+                };
+
+                setTimeout(() => this.panel.webview.postMessage(m), 500);
             });
 
     }
@@ -224,7 +230,12 @@ export class EditorMonitor {
             .then((result) => {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
-                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                const m: WebviewMessage<any> = {
+                    command: "toggleShowVisibilityDone",
+                    data: null,
+                };
+                setTimeout(() => this.panel.webview.postMessage(m), 500);
             });
 
     }
@@ -237,7 +248,13 @@ export class EditorMonitor {
             .then((result) => {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
-                this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+                const m: WebviewMessage<any> = {
+                    command: "toggleShowDataTypesDone",
+                    data: null,
+                };
+                setTimeout(() => this.panel.webview.postMessage(m), 500);
+
             });
 
     }

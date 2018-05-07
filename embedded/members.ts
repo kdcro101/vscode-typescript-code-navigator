@@ -220,26 +220,70 @@ function focusBackToEditor() {
 }
 
 function toggleShowIcons() {
+    const s = document.getElementById("spinner") as HTMLDivElement;
+    s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+
     const o: WebviewMessage<any> = {
         command: "toggleShowIcons",
         data: null,
     };
 
+    const receiver = (e: MessageEvent) => {
+        const d = e.data as WebviewMessage<any>;
+        console.log("message");
+        console.log(d);
+        if (d.command === "toggleShowIconsDone") {
+            window.removeEventListener("message", receiver);
+            s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+        }
+    };
+
+    window.addEventListener("message", receiver);
     vscode.postMessage(o);
 }
 function toggleShowVisibility() {
+    const s = document.getElementById("spinner") as HTMLDivElement;
+    s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+
     const o: WebviewMessage<any> = {
         command: "toggleShowVisibility",
         data: null,
     };
 
+    const receiver = (e: MessageEvent) => {
+        const d = e.data as WebviewMessage<any>;
+        console.log("message");
+        console.log(d);
+        if (d.command === "toggleShowVisibilityDone") {
+            window.removeEventListener("message", receiver);
+            s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+        }
+    };
+
+    window.addEventListener("message", receiver);
+
     vscode.postMessage(o);
 }
 function toggleShowDataTypes() {
+    const s = document.getElementById("spinner") as HTMLDivElement;
+    s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+
     const o: WebviewMessage<any> = {
         command: "toggleShowDataTypes",
         data: null,
     };
+
+    const receiver = (e: MessageEvent) => {
+        const d = e.data as WebviewMessage<any>;
+        console.log("message");
+        console.log(d);
+        if (d.command === "toggleShowDataTypesDone") {
+            window.removeEventListener("message", receiver);
+            s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+        }
+    };
+
+    window.addEventListener("message", receiver);
 
     vscode.postMessage(o);
 }

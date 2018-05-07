@@ -20,6 +20,16 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 `typescript.navigator.collapseClasses`: `boolean`
 - should collapse class declarations when populating panel, `default = false`
 
+`typescript.navigator.showVisibilityLabels`:`boolean`
+- show class member modifiers (visibility) in navigator, `default = true` 
+
+`typescript.navigator.showIcons`:`boolean`
+- show icons in navigator, `default = true` 
+
+`typescript.navigator.showDataTypes`:`boolean`
+- show data types in navigator (if available), `default = true` 
+                                           
+
 ## Usage
 
 To open panel press CTRL+P (Show all commands) and select `Show Typescript code navigator`

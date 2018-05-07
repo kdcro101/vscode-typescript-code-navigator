@@ -161,6 +161,13 @@ export class ContentParser {
                                      onclick="toggleShowIcons()">ICONS</div>
                                 <div id="showDataTypes" class="action ${ this.showDataTypes === true ? "enabled" : ""}"
                                     onclick="toggleShowDataTypes()">TYPES</div>
+                                <div id="spinner" class="spinner invisible">
+                                    <div class="rect1"></div>
+                                    <div class="rect2"></div>
+                                    <div class="rect3"></div>
+                                    <div class="rect4"></div>
+                                    <div class="rect5"></div>
+                                </div>
                             </div>
                         </div>
                         <script>
