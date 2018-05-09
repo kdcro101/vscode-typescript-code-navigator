@@ -4,6 +4,7 @@ out/test/**
 test/**
 src/**
 embedded/**
+.sass-cache/**/*.*
 preview/**
 media/**
 scss/**

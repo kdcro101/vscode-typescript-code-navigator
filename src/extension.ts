@@ -46,7 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
         navigatorPanel.onDidDispose(() => {
             navigatorPanel = null;
             monitor.setPanel(null);
-        });
+        }, null, context.subscriptions);
 
     }));
 

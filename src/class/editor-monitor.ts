@@ -29,8 +29,6 @@ export class EditorMonitor {
     public lastDocumentActionable: vscode.TextDocument = null;
     public lastDocumentFocusable: vscode.TextDocument = null;
     private panel: vscode.WebviewPanel = null;
-    private disposablePanelMessage: vscode.Disposable = null;
-    private disposablePanelViewState: vscode.Disposable = null;
 
     private memo: DocumentMemory = {};
 
@@ -67,10 +65,14 @@ export class EditorMonitor {
         ).subscribe((d) => this.eventDocumentUpdate.next(this.lastDocumentActionable));
 
         observableMerge(
-            this.eventChangeActiveTextEditor.pipe(filter((d) => d != null && d.document != null && d.document.languageId !== "typescript")),
-            // this.eventChangeActiveTextEditor.pipe(filter((d) => d == null)),
+            this.eventChangeActiveTextEditor.pipe(
+                filter((d) => d == null || (d != null && d.document != null && d.document.languageId !== "typescript")),
+            ),
         ).pipe(
+            tap(() => console.log("Not typescript or null")),
             map<vscode.TextEditor, vscode.TextDocument>((d) => d != null && d.document != null ? d.document : null),
+            filter(() => this.panel != null),
+            filter(() => this.panel.visible === false),
         ).subscribe((d) => this.updatePanelNotTypescript(d));
 
         this.eventChangeActiveTextEditor.pipe(
@@ -85,7 +87,7 @@ export class EditorMonitor {
                     path: d.document.uri.fsPath,
                 };
             }),
-            distinctUntilKeyChanged("path"),
+            // distinctUntilKeyChanged("path"),
             filter((d) => d.editor.document.languageId === "typescript"),
             tap((d) => {
                 this.lastFsPath = d.path;
@@ -100,6 +102,7 @@ export class EditorMonitor {
         ).subscribe((d) => this.eventDocumentUpdate.next(d.document));
 
         this.eventDocumentUpdate.pipe(
+            filter(() => this.panel !== null),
             tap((d) => {
                 const documentId = d.uri.fsPath;
                 if (this.memo[documentId] == null) {
@@ -138,23 +141,19 @@ export class EditorMonitor {
         const data = this.memo[d.uri.fsPath];
 
         const parser = new ContentParser(this.context, d, data);
-        this.panel.title = path.basename(d.uri.fsPath);
+        this.panel.title = "Code Navigator";
 
         parser.generateHtml()
             .then((result) => {
                 this.panel.webview.html = result;
             })
             .catch((error) => {
-                this.panel.webview.html = error;
+                this.panel.webview.html = "Error";
             });
 
     }
     public updatePanelNotTypescript(d: vscode.TextDocument) {
-        if (d != null) {
-            this.panel.title = path.basename(d.uri.fsPath);
-        } else {
-            this.panel.title = "-";
-        }
+        this.panel.title = "Code Navigator";
         this.panel.webview.html = ``;
     }
     public setPanel(val: vscode.WebviewPanel) {
@@ -162,25 +161,16 @@ export class EditorMonitor {
         const ae = vscode.window.activeTextEditor;
 
         if (val == null) {
-            if (this.disposablePanelMessage != null) {
-                this.disposablePanelMessage.dispose();
-            }
-            if (this.disposablePanelViewState != null) {
-                this.disposablePanelViewState.dispose();
-            }
             return;
         }
 
         if (val != null && ae != null) {
             this.eventDocumentUpdate.next(ae.document);
         }
-        this.disposablePanelMessage = this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => this.eventMessage.next(m));
-        // this.disposablePanelViewState = this.panel.onDidChangeViewState((e) => {
-        //     console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
-        //     if (e.webviewPanel.visible === true) {
-        //         vscode.window.showTextDocument(this.lastDocumentFocusable);
-        //     }
-        // });
+        this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => this.eventMessage.next(m), null, this.context.subscriptions);
+        this.panel.onDidChangeViewState((e) => {
+            console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
+        }, null, this.context.subscriptions);
     }
     public saveCollapseState(m: WebviewMessage<MessageCollapseStateData>) {
 
