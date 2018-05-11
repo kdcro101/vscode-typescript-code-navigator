@@ -23,7 +23,7 @@
         "vscode": "^1.23.0"
     },
     "activationEvents": [
-        "*"
+        "workspaceContains:**/.ts"
     ],
     "main": "./out/extension",
     "contributes": {
