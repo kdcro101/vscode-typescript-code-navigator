@@ -1,3 +1,6 @@
+import { Declaration } from "typescript-parser";
+import * as vscode from "vscode";
+
 export interface WebviewMessage<T> {
     command: string;
     data: T;
@@ -25,4 +28,13 @@ export interface DocumentStateItem {
 }
 export interface DocumentMemory {
     [key: string]: DocumentStateItem[];
+}
+export interface DocumentUpdateBundle {
+    ignoreFsPathCheck: boolean;
+    document: vscode.TextDocument;
+}
+
+export interface ClassMember {
+    type: string;
+    declaration: Declaration;
 }

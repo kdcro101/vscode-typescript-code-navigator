@@ -9,46 +9,48 @@ import { ContentParser } from "./class/parser";
 import { MessageRevealData, WebviewMessage } from "./types/index";
 
 import { Subject } from "rxjs";
-import { debounceTime, delay, filter, map } from "rxjs/operators";
+import { debounceTime, delay, filter, map, take } from "rxjs/operators";
 import { EditorMonitor } from "./class/editor-monitor";
+import { PanelManager } from "./class/panel";
 
 export function activate(context: vscode.ExtensionContext) {
 
     (global as any).vscode = vscode;
-
-    let navigatorPanel: vscode.WebviewPanel = null;
+    const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    const config = vscode.workspace.getConfiguration();
     const monitor = new EditorMonitor(context);
+    const panelManager = new PanelManager(context);
+    const updateStatusbar = (active: boolean) => {
+        if (active) {
+            status.text = "TS Code navigator [ON]";
+        } else {
+            status.text = "TS Code navigator [OFF]";
+        }
+        status.show();
+    };
+
+    panelManager.eventCreate
+        .subscribe((w) => monitor.setPanel(w));
+    panelManager.eventDispose
+        .subscribe(() => monitor.setPanel(null));
 
     context.subscriptions.push(vscode.commands.registerCommand("extension.showTypescriptMembers", () => {
 
-        if (navigatorPanel) {
-            navigatorPanel.reveal(vscode.ViewColumn.Three);
-            return;
+        config.update("typescript.navigator.active", true, false);
+
+        const _tsDoc = vscode.workspace.textDocuments.filter((sd) => sd.isClosed === false && sd.languageId === "typescript");
+        if (_tsDoc.length > 0) {
+            panelManager.create();
+
         }
 
-        navigatorPanel = vscode.window.createWebviewPanel("typescriptNavigator", "Navigator", vscode.ViewColumn.Three, {
-            enableScripts: true,
-            // And restric the webview to only loading content from our extension's `media` directory.
-            localResourceRoots: [
-                vscode.Uri.file(path.join(context.extensionPath, "svg")),
-            ],
-        });
-        monitor.setPanel(navigatorPanel);
-        navigatorPanel.webview.onDidReceiveMessage((message: WebviewMessage<MessageRevealData>) => {
-            switch (message.command) {
-                case "reveal":
-                    const data = message.data;
-                    vscode.commands.executeCommand("extension.revealTypescriptMember", data.uri, data.start, data.end);
-                    return;
-            }
-        }, undefined, context.subscriptions);
-
-        navigatorPanel.onDidDispose(() => {
-            navigatorPanel = null;
-            monitor.setPanel(null);
-        }, null, context.subscriptions);
-
     }));
+    vscode.workspace.onDidChangeConfiguration((event: vscode.ConfigurationChangeEvent) => {
+        setTimeout(() => {
+            const active: boolean =  vscode.workspace.getConfiguration().get("typescript.navigator.active");
+            updateStatusbar(active);
+        });
+    }, null, context.subscriptions);
 
     vscode.commands.registerCommand("extension.revealTypescriptMember", (uri: vscode.Uri, propStart: number, propEnd: number) => {
 
@@ -70,8 +72,13 @@ export function activate(context: vscode.ExtensionContext) {
             }
         }
     });
-
     const highlight = vscode.window.createTextEditorDecorationType({ backgroundColor: "rgba(200,200,200,.35)" });
-    vscode.commands.executeCommand("extension.showTypescriptMembers");
 
+    const isActive: boolean = config.get("typescript.navigator.active");
+
+    updateStatusbar(isActive);
+
+    if (isActive) {
+        vscode.commands.executeCommand("extension.showTypescriptMembers");
+    }
 }

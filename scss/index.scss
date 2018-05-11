@@ -109,7 +109,14 @@ div.root-declaration .child .item {
 .item .visibility {
     font-size: 80%;
     margin-right: 8px;
-    flex: 0 1 auto;
+    border-radius: 2px;
+    padding: 2px 2px 2px 2px;
+    flex: 0 0 auto;
+    text-transform: uppercase;
+    &.no-data {
+        margin-right: 0px;
+        padding: 0;
+    }
 }
 
 .item .type {
@@ -122,6 +129,9 @@ div.root-declaration .child .item {
     white-space: nowrap;
     position: relative;
     flex: 0 1 auto;
+    &.no-data {
+        margin-left: 0px;
+    }
 }
 
 .collapse-wrapper {

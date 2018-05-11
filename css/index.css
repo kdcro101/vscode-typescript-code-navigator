@@ -112,11 +112,6 @@ body.vscode-dark {
     padding: 2px 4px 2px 4px;
     margin-left: 8px;
     flex: 0 1 auto; }
-  body.vscode-dark .item .visibility {
-    border-radius: 2px;
-    padding: 2px 2px 2px 2px;
-    flex: 0 0 auto;
-    text-transform: uppercase; }
   body.vscode-dark .item .visibility.public {
     color: #43a047; }
   body.vscode-dark .item .visibility.private {
@@ -287,11 +282,6 @@ body.vscode-light {
     padding: 2px 4px 2px 4px;
     margin-left: 8px;
     flex: 0 1 auto; }
-  body.vscode-light .item .visibility {
-    border-radius: 2px;
-    padding: 2px 2px 2px 2px;
-    flex: 0 0 auto;
-    text-transform: uppercase; }
   body.vscode-light .item .visibility.public {
     color: #43a047; }
   body.vscode-light .item .visibility.private {
@@ -458,11 +448,6 @@ body.vscode-high-contrast {
     padding: 2px 4px 2px 4px;
     margin-left: 8px;
     flex: 0 1 auto; }
-  body.vscode-high-contrast .item .visibility {
-    border-radius: 2px;
-    padding: 2px 2px 2px 2px;
-    flex: 0 0 auto;
-    text-transform: uppercase; }
   body.vscode-high-contrast .item .visibility.public {
     color: #43a047; }
   body.vscode-high-contrast .item .visibility.private {
@@ -658,7 +643,13 @@ div.root-declaration .child .item {
 .item .visibility {
   font-size: 80%;
   margin-right: 8px;
-  flex: 0 1 auto; }
+  border-radius: 2px;
+  padding: 2px 2px 2px 2px;
+  flex: 0 0 auto;
+  text-transform: uppercase; }
+  .item .visibility.no-data {
+    margin-right: 0px;
+    padding: 0; }
 
 .item .type {
   font-size: 80%;
@@ -670,6 +661,8 @@ div.root-declaration .child .item {
   white-space: nowrap;
   position: relative;
   flex: 0 1 auto; }
+  .item .type.no-data {
+    margin-left: 0px; }
 
 .collapse-wrapper {
   height: 18px;

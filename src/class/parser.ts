@@ -1,26 +1,24 @@
 import * as fs from "fs-extra";
-
-import * as ts from "typescript";
-
 import * as _ from "lodash";
-
+import * as ts from "typescript";
 import {
+    AccessorDeclaration,
     ClassDeclaration,
     Declaration,
     EnumDeclaration,
-    File,
-    FunctionDeclaration, GenericDeclaration,
+    File, FunctionDeclaration,
+    GenericDeclaration,
     getVisibilityText,
     InterfaceDeclaration,
+    MethodDeclaration,
+    PropertyDeclaration,
     TypeAliasDeclaration,
     TypescriptParser,
     VariableDeclaration,
 } from "typescript-parser";
 import * as vscode from "vscode";
-import { DocumentStateItem } from "../types";
+import { ClassMember, DocumentStateItem } from "../types";
 import { CompilerConfig } from "./compiler";
-
-// vscode.workspace.getConfiguration("root");
 
 export class ContentParser {
 
@@ -311,6 +309,32 @@ export class ContentParser {
     public buildClassDeclaration(d: ClassDeclaration): string {
         const props = d.properties != null ? _.sortBy(d.properties, (i) => i.name) : [];
         const methods = d.methods != null ? _.sortBy(d.methods, (i) => i.name) : [];
+        const accessors = d.accessors != null ? _.sortBy(d.accessors, (i) => i.name) : [];
+
+        const all: ClassMember[] = [];
+        const rest: ClassMember[] = [];
+
+        props.forEach((p, i) => {
+            all.push({
+                declaration: p,
+                type: "property",
+            });
+        });
+        methods.forEach((p, i) => {
+            rest.push({
+                declaration: p,
+                type: "method",
+            });
+        });
+        accessors.forEach((p, i) => {
+            rest.push({
+                declaration: p,
+                type: "accessor",
+            });
+        });
+
+        const restSorted = _.sortBy(rest, (i) => i.declaration.name);
+        const final = all.concat(restSorted);
 
         const memo = this.docState.find((e) => e.key === d.name);
 
@@ -332,20 +356,35 @@ export class ContentParser {
         const elems: string[] =
             [this.renderPartial(d.start, d.end, "class", d.name, d.isExported, null, null, null, childId, isCollapsed)];
 
-        if (props.length > 0 || methods.length > 0) {
+        if (final.length > 0) {
             elems.push(`<div class="child" id="${childId}">
-            ${props.map((dc) => {
-                    const pv = getVisibilityText(dc.visibility);
-                    return this.renderPartial(dc.start, dc.end, "property", dc.name, false, dc.type, pv);
-                }).join("")}
-            ${methods.map((dc) => {
-                    const mv = getVisibilityText(dc.visibility);
-                    return this.renderPartial(dc.start, dc.end, "method", dc.name, false, dc.type, mv, dc.isAbstract);
+            ${final.map((dc) => {
+                    if (dc.type === "property") {
+                        const p = dc.declaration as PropertyDeclaration;
+                        const pv = getVisibilityText(p.visibility);
+                        return this.renderPartial(p.start, p.end, "property", p.name, false, p.type, pv);
+                    }
+                    if (dc.type === "method") {
+                        const m = dc.declaration as MethodDeclaration;
+                        const mv = getVisibilityText(m.visibility);
+                        return this.renderPartial(m.start, m.end, "method", m.name, false, m.type, mv);
+                    }
+                    if (dc.type === "accessor") {
+                        const a = dc.declaration as AccessorDeclaration;
+                        const av = getVisibilityText(a.visibility);
+                        return this.renderPartial(a.start, a.end, "field", a.name, false, a.type, av);
+                    }
                 }).join("")}
             </div>`);
         }
 
         return elems.join("");
+
+    }
+    public buildPropertyDeclaration(d: PropertyDeclaration): string {
+        const pv = getVisibilityText(d.visibility);
+        const o = this.renderPartial(d.start, d.end, "variable", d.name, false, d.type, pv);
+        return o;
 
     }
     public buildVariableDeclaration(d: VariableDeclaration): string {
@@ -381,6 +420,20 @@ export class ContentParser {
 
         const showVisibility = this.showVisibility === true ? true : false;
         const showDataTypes = this.showDataTypes === true ? true : false;
+        let visibilityText: string = "";
+        const dataTypeText: string = dataType == null ? "" : dataType;
+
+        switch (visibility) {
+            case "private":
+                visibilityText = "pri";
+                break;
+            case "protected":
+                visibilityText = "pro";
+                break;
+            case "public":
+                visibilityText = "pub";
+                break;
+        }
 
         const o = `
             <div id="parent_${collapseId}" name="${name}" class="item
@@ -393,11 +446,13 @@ export class ContentParser {
                     <div class="collapse-action drop-up ${collapseId == null ? "hidden" : ""}" collapse="${collapseId}"></div>
                 </div>
                 <div class="icon quick-open-entry-icon ${context} ${this.showIcons === true ? "" : "hidden"}"></div>
-                <div class="visibility private ${visibility === "private" && showVisibility ? "" : "hidden"}">pri</div>
-                <div class="visibility public ${visibility === "public" && showVisibility ? "" : "hidden"}">pub</div>
-                <div class="visibility protected ${visibility === "protected" && showVisibility ? "" : "hidden"}">pro</div>
+                <div class="visibility ${ visibility == null ? "no-data" : ""} ${visibility} ${showVisibility ? "" : "hidden"}">
+                  ${visibilityText}
+                </div>
                 <div class="name">${name}</div>
-                <div class="type ${dataType != null && showDataTypes === true ? "" : "hidden"}">${dataType}</div>
+                <div class="type ${ dataType == null ? "no-data" : ""} ${dataType != null && showDataTypes === true ? "" : "hidden"}">
+                    ${dataTypeText}
+                </div>
                 <div class="abstract ${abstract === true ? "" : "hidden"}">abstract</div>
                 <div class="exported ${exported === false ? "hidden" : ""}">exported</div>
            </div>`;

@@ -3,7 +3,7 @@ import { merge as observableMerge, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, filter, map, tap } from "rxjs/operators";
 import * as vscode from "vscode";
 
-import { DocumentMemory, MessageCollapseStateData, WebviewMessage } from "../types";
+import { DocumentMemory, DocumentUpdateBundle, MessageCollapseStateData, WebviewMessage } from "../types";
 import { DocumentStateItem } from "../types/index";
 import { ContentParser } from "./parser";
 export interface ChangeActiveTextEditorEvent {
@@ -19,7 +19,7 @@ export class EditorMonitor {
     public eventDocumentNotTypescript = new Subject<void>();
 
     public eventDocumentLoad = new Subject<void>();
-    public eventDocumentUpdate = new Subject<vscode.TextDocument>();
+    public eventDocumentUpdate = new Subject<DocumentUpdateBundle>();
     public eventMessage = new Subject<WebviewMessage<any>>();
 
     public lastUri: vscode.Uri = null;
@@ -58,11 +58,12 @@ export class EditorMonitor {
         });
 
         this.eventChangeConfiguration.pipe(
-            // filter(() => vscode.window.activeTextEditor != null),
-            // filter(() => vscode.window.activeTextEditor.document != null),
-            // filter(() => vscode.window.activeTextEditor.document.languageId === "typescript"),
-            // map<any, vscode.TextDocument>(() => vscode.window.activeTextEditor.document),
-        ).subscribe((d) => this.eventDocumentUpdate.next(this.lastDocumentActionable));
+        ).subscribe((d) => {
+            this.eventDocumentUpdate.next({
+                document: this.lastDocumentActionable,
+                ignoreFsPathCheck: false,
+            });
+        });
 
         observableMerge(
             this.eventChangeActiveTextEditor.pipe(
@@ -80,6 +81,7 @@ export class EditorMonitor {
         ).subscribe((d) => this.lastDocumentFocusable = d.document);
 
         this.eventChangeActiveTextEditor.pipe(
+            filter(() => this.panel != null),
             filter((d) => d != null && d.document != null),
             map<vscode.TextEditor, ChangeActiveTextEditorEvent>((d) => {
                 return {
@@ -87,30 +89,41 @@ export class EditorMonitor {
                     path: d.document.uri.fsPath,
                 };
             }),
-            // distinctUntilKeyChanged("path"),
             filter((d) => d.editor.document.languageId === "typescript"),
-            tap((d) => {
-                this.lastFsPath = d.path;
-                this.lastUri = d.editor.document.uri;
-            }),
-        ).subscribe((d) => this.eventDocumentUpdate.next(d.editor.document));
+        ).subscribe((d) => this.eventDocumentUpdate.next({
+            document: d.editor.document,
+            ignoreFsPathCheck: false,
+        }));
 
         this.eventChangeTextDocument.pipe(
+            filter(() => this.panel != null),
+            tap((d) => {
+                console.log("eventChangeTextDocument");
+                console.log(d);
+            }),
             filter((d) => d != null && d.document != null),
             filter((d) => d.document.languageId === "typescript"),
             debounceTime(500),
-        ).subscribe((d) => this.eventDocumentUpdate.next(d.document));
+        ).subscribe((d) => this.eventDocumentUpdate.next({
+            document: d.document,
+            ignoreFsPathCheck: true,
+        }));
 
         this.eventDocumentUpdate.pipe(
-            filter(() => this.panel !== null),
+            filter(() => this.panel != null),
+            filter((d) => d.document.languageId === "typescript" ),
+            filter((d) => d.ignoreFsPathCheck || (this.lastFsPath !== d.document.uri.fsPath)),
             tap((d) => {
-                const documentId = d.uri.fsPath;
+                this.lastFsPath = d.document.uri.fsPath;
+                this.lastUri = d.document.uri;
+
+                const documentId = d.document.uri.fsPath;
                 if (this.memo[documentId] == null) {
                     this.memo[documentId] = [];
                 }
             }),
-            tap((d) => this.lastDocumentActionable = d),
-        ).subscribe((d) => this.updatePanel(d));
+            tap((d) => this.lastDocumentActionable = d.document),
+        ).subscribe((d) => this.updatePanel(d.document));
 
         this.eventMessage.pipe(
             filter((d) => d.command === "toggleState"),
@@ -135,6 +148,13 @@ export class EditorMonitor {
             vscode.window.showTextDocument(this.lastUri);
         });
 
+        this.eventMessage.pipe(
+            filter((d) => d.command === "reveal"),
+        ).subscribe((d) => {
+            const data = d.data;
+            vscode.commands.executeCommand("extension.revealTypescriptMember", data.uri, data.start, data.end);
+        });
+
     }
     public updatePanel(d: vscode.TextDocument) {
         console.log(`updatePanel ${d.uri.fsPath}`);
@@ -153,10 +173,15 @@ export class EditorMonitor {
 
     }
     public updatePanelNotTypescript(d: vscode.TextDocument) {
+        this.lastFsPath = null;
+
         this.panel.title = "Code Navigator";
         this.panel.webview.html = ``;
+
     }
     public setPanel(val: vscode.WebviewPanel) {
+        console.log("EditorMonitor.setPanel");
+        console.log(val);
         this.panel = val;
         const ae = vscode.window.activeTextEditor;
 
@@ -165,11 +190,21 @@ export class EditorMonitor {
         }
 
         if (val != null && ae != null) {
-            this.eventDocumentUpdate.next(ae.document);
+            this.eventDocumentUpdate.next({
+                document: ae.document,
+                ignoreFsPathCheck: false,
+            });
         }
-        this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => this.eventMessage.next(m), null, this.context.subscriptions);
+        this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) =>
+            this.eventMessage.next(m), null, this.context.subscriptions);
+
         this.panel.onDidChangeViewState((e) => {
             console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
+        }, null, this.context.subscriptions);
+
+        this.panel.onDidDispose(() => {
+            this.lastFsPath = null;
+            this.lastUri = null;
         }, null, this.context.subscriptions);
     }
     public saveCollapseState(m: WebviewMessage<MessageCollapseStateData>) {
@@ -202,12 +237,12 @@ export class EditorMonitor {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
                 // this.eventDocumentUpdate.next(this.lastDocumentActionable);
-                const m: WebviewMessage<any> = {
+                const m: WebviewMessage<boolean> = {
                     command: "toggleShowIconsDone",
-                    data: null,
+                    data: next,
                 };
 
-                setTimeout(() => this.panel.webview.postMessage(m), 500);
+                setTimeout(() => this.panel.webview.postMessage(m), 100);
             });
 
     }
@@ -221,11 +256,11 @@ export class EditorMonitor {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
                 // this.eventDocumentUpdate.next(this.lastDocumentActionable);
-                const m: WebviewMessage<any> = {
+                const m: WebviewMessage<boolean> = {
                     command: "toggleShowVisibilityDone",
-                    data: null,
+                    data: next,
                 };
-                setTimeout(() => this.panel.webview.postMessage(m), 500);
+                setTimeout(() => this.panel.webview.postMessage(m), 100);
             });
 
     }
@@ -239,11 +274,11 @@ export class EditorMonitor {
                 console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
                 // vscode.window.showTextDocument(this.lastDocumentActionable);
                 // this.eventDocumentUpdate.next(this.lastDocumentActionable);
-                const m: WebviewMessage<any> = {
+                const m: WebviewMessage<boolean> = {
                     command: "toggleShowDataTypesDone",
-                    data: null,
+                    data: next,
                 };
-                setTimeout(() => this.panel.webview.postMessage(m), 500);
+                setTimeout(() => this.panel.webview.postMessage(m), 100);
 
             });
 

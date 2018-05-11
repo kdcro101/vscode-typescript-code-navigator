@@ -8,5 +8,18 @@
 	},
     "typescript.tsdk": "./node_modules/typescript/lib",
     "favorites.sortDirection": "ASC",
-    "favorites.groupsFirst": true // we want to use the TS server from our node_modules folder to control its version
+    "favorites.groupsFirst": true,
+    "typescript.navigator.showVisibilityLabels": false,
+    "typescript.navigator.showIcons": false,
+    "typescript.navigator.showDataTypes": true,
+    "typescript.navigator.active": false,
+    "favorites.root": [
+        {
+            "type": "Directory",
+            "name": "/exec/vscode-extension-samples/previewhtml-sample/out",
+            "parent_id": null,
+            "id": "ZFOKxuCfz3QRJoDp",
+            "workspacePath": "out"
+        }
+    ] // we want to use the TS server from our node_modules folder to control its version
 }

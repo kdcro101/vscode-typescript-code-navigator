@@ -221,7 +221,9 @@ function focusBackToEditor() {
 
 function toggleShowIcons() {
     const s = document.getElementById("spinner") as HTMLDivElement;
+    const button = document.getElementById("showIcons") as HTMLDivElement;
     s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+    focusBackToEditor();
 
     const o: WebviewMessage<any> = {
         command: "toggleShowIcons",
@@ -233,8 +235,23 @@ function toggleShowIcons() {
         console.log("message");
         console.log(d);
         if (d.command === "toggleShowIconsDone") {
+            console.log("message toggleShowIconsDone");
             window.removeEventListener("message", receiver);
             s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+
+            const newState = d.data;
+            if (newState) {
+                if (button.classList.contains("enabled")) {
+                    //
+                } else {
+                    button.classList.add("enabled");
+                }
+            } else {
+
+                button.classList.remove("enabled");
+            }
+
+            processIconsVisiblility(newState);
         }
     };
 
@@ -243,7 +260,9 @@ function toggleShowIcons() {
 }
 function toggleShowVisibility() {
     const s = document.getElementById("spinner") as HTMLDivElement;
+    const button = document.getElementById("showVisibility") as HTMLDivElement;
     s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+    focusBackToEditor();
 
     const o: WebviewMessage<any> = {
         command: "toggleShowVisibility",
@@ -257,6 +276,20 @@ function toggleShowVisibility() {
         if (d.command === "toggleShowVisibilityDone") {
             window.removeEventListener("message", receiver);
             s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+
+            const newState = d.data;
+            if (newState) {
+                if (button.classList.contains("enabled")) {
+                    //
+                } else {
+                    button.classList.add("enabled");
+                }
+            } else {
+
+                button.classList.remove("enabled");
+            }
+
+            processModifierVisiblility(newState);
         }
     };
 
@@ -266,7 +299,9 @@ function toggleShowVisibility() {
 }
 function toggleShowDataTypes() {
     const s = document.getElementById("spinner") as HTMLDivElement;
+    const button = document.getElementById("showDataTypes") as HTMLDivElement;
     s.classList.contains("invisible") ? s.classList.remove("invisible") : (() => {/**/ })();
+    focusBackToEditor();
 
     const o: WebviewMessage<any> = {
         command: "toggleShowDataTypes",
@@ -280,10 +315,74 @@ function toggleShowDataTypes() {
         if (d.command === "toggleShowDataTypesDone") {
             window.removeEventListener("message", receiver);
             s.classList.contains("invisible") ? (() => {/**/ })() : s.classList.add("invisible");
+
+            const newState = d.data;
+            if (newState) {
+                if (button.classList.contains("enabled")) {
+                    //
+                } else {
+                    button.classList.add("enabled");
+                }
+            } else {
+
+                button.classList.remove("enabled");
+            }
+
+            processTypeVisiblility(newState);
         }
     };
 
     window.addEventListener("message", receiver);
 
     vscode.postMessage(o);
+}
+
+function processIconsVisiblility(state: boolean) {
+    const items = document.querySelectorAll("div.item>.icon");
+    for (let i = 0; i < items.length; i++) {
+        const e: HTMLDivElement = items.item(i) as HTMLDivElement;
+
+        if (state === true) {
+            if (e.classList.contains("hidden")) {
+                e.classList.remove("hidden");
+            }
+        } else {
+            if (!e.classList.contains("hidden")) {
+                e.classList.add("hidden");
+            }
+        }
+    }
+}
+
+function processModifierVisiblility(state: boolean) {
+    const items = document.querySelectorAll("div.item>.visibility");
+    for (let i = 0; i < items.length; i++) {
+        const e: HTMLDivElement = items.item(i) as HTMLDivElement;
+
+        if (state === true) {
+            if (e.classList.contains("hidden")) {
+                e.classList.remove("hidden");
+            }
+        } else {
+            if (!e.classList.contains("hidden")) {
+                e.classList.add("hidden");
+            }
+        }
+    }
+}
+function processTypeVisiblility(state: boolean) {
+    const items = document.querySelectorAll("div.item>.type");
+    for (let i = 0; i < items.length; i++) {
+        const e: HTMLDivElement = items.item(i) as HTMLDivElement;
+
+        if (state === true) {
+            if (e.classList.contains("hidden")) {
+                e.classList.remove("hidden");
+            }
+        } else {
+            if (!e.classList.contains("hidden")) {
+                e.classList.add("hidden");
+            }
+        }
+    }
 }

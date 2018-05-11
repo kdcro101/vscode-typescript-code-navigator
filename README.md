@@ -14,7 +14,11 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 
 `ext install kdcro101.typescript-code-navigator`
 
+## Usage
 
+To open panel press CTRL+P (Show all commands) and select `Show code navigator for typescript`
+
+    
 ## Configuration
 `typescript.navigator.collapseEnums` : `boolean`
  - should collapse enum declarations when populating panel, `default = true`
@@ -34,10 +38,6 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 `typescript.navigator.showDataTypes` : `boolean`
 - show data types in navigator (if available), `default = true` 
                                            
-
-## Usage
-
-To open panel press CTRL+P (Show all commands) and select `Show Typescript code navigator`
 
 
 ## LICENSE
