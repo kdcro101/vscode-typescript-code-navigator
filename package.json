@@ -2,7 +2,7 @@
     "name": "typescript-code-navigator",
     "displayName": "Code navigator for typescript",
     "description": "Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "publisher": "kdcro101",
     "icon": "icon/icon.png",
     "galleryBanner": {
@@ -23,7 +23,7 @@
         "vscode": "^1.23.0"
     },
     "activationEvents": [
-        "workspaceContains:**/.ts"
+        "onLanguage:typescript"
     ],
     "main": "./out/extension",
     "contributes": {
