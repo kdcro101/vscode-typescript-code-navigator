@@ -30,6 +30,8 @@ function runMessage(uri: string, s: number, e: number) {
 
 function setupItemListeners() {
 
+    console.error("setupItemListeners");
+
     const collapseElements = document.querySelectorAll("div.collapse-action");
 
     for (let i = 0; i < collapseElements.length; i++) {
@@ -40,6 +42,7 @@ function setupItemListeners() {
     const matches = document.querySelectorAll("div.item");
 
     for (let i = 0; i < matches.length; i++) {
+        console.log("adding listener for item");
         const e: HTMLElement = matches.item(i) as HTMLElement;
         e.addEventListener("mousedown", onItemClick.bind(e), false);
         e.addEventListener("mouseup", onItemRelease.bind(e), false);

@@ -20,7 +20,7 @@
         "Other"
     ],
     "engines": {
-        "vscode": "^1.23.0"
+        "vscode": "^1.25.0"
     },
     "activationEvents": [
         "onLanguage:typescript",
@@ -28,51 +28,55 @@
     ],
     "main": "./out/extension",
     "contributes": {
-        "commands": [{
-            "command": "extension.showTypescriptMembers",
-            "title": "Show code navigator for typescript"
-        }],
-        "configuration": [{
-            "title": "vscode-typescript-navigator-settings",
-            "type": "object",
-            "properties": {
-                "typescript.navigator.collapseEnums": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse enums"
-                },
-                "typescript.navigator.collapseInterfaces": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Should collapse interfaces"
-                },
-                "typescript.navigator.collapseClasses": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Should collapse classes"
-                },
-                "typescript.navigator.showVisibilityLabels": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show visibility label"
-                },
-                "typescript.navigator.showIcons": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show icons"
-                },
-                "typescript.navigator.showDataTypes": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Show data type"
-                },
-                "typescript.navigator.active": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "State of panel in workspace"
+        "commands": [
+            {
+                "command": "extension.showTypescriptMembers",
+                "title": "Show code navigator for typescript"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "vscode-typescript-navigator-settings",
+                "type": "object",
+                "properties": {
+                    "typescript.navigator.collapseEnums": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse enums"
+                    },
+                    "typescript.navigator.collapseInterfaces": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Should collapse interfaces"
+                    },
+                    "typescript.navigator.collapseClasses": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Should collapse classes"
+                    },
+                    "typescript.navigator.showVisibilityLabels": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show visibility label"
+                    },
+                    "typescript.navigator.showIcons": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show icons"
+                    },
+                    "typescript.navigator.showDataTypes": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "Show data type"
+                    },
+                    "typescript.navigator.active": {
+                        "type": "boolean",
+                        "default": true,
+                        "description": "State of panel in workspace"
+                    }
                 }
             }
-        }]
+        ]
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",

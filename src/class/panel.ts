@@ -26,26 +26,6 @@ export class PanelManager {
             this.eventChangeDocumentList.next();
         }, null, this.context.subscriptions);
 
-        this.eventChangeDocumentList.pipe(
-            filter(() => this.isActive),
-            filter(() => this.webViewPanel != null),
-            debounceTime(100),
-            map<void, vscode.TextDocument[]>(() => vscode.workspace.textDocuments.filter((sd) => sd.isClosed === false)),
-            filter((d) => d.filter((e) => e != null && e.languageId === "typescript").length === 0),
-        ).subscribe((d) => {
-            this.disposeTemporarily();
-        });
-
-        this.eventChangeDocumentList.pipe(
-            filter(() => this.isActive),
-            filter(() => this.webViewPanel == null),
-            debounceTime(1),
-            map<void, vscode.TextDocument[]>(() => vscode.workspace.textDocuments.filter((sd) => sd.isClosed === false)),
-            filter((d) => d.filter((e) => e != null && e.languageId === "typescript").length > 0),
-        ).subscribe((d) => {
-            this.create();
-        });
-
         this.eventWebviewDispose.pipe(
             map<void, boolean>(() => this.dontDeactivate),
         ).subscribe((dontDeactivate) => {
@@ -60,19 +40,17 @@ export class PanelManager {
             this.webViewPanel = null;
         });
 
-        this.eventWebviewDispose.subscribe(() => {
-            console.error("eventWebviewDispose");
-        });
     }
 
     public create(): vscode.WebviewPanel {
         if (this.webViewPanel != null) {
             return this.webViewPanel;
         }
-        const ae = vscode.window.activeTextEditor;
+        // const ae = vscode.window.activeTextEditor;
 
         this.webViewPanel = vscode.window.createWebviewPanel("typescriptNavigator", "Navigator", vscode.ViewColumn.Three, {
             enableScripts: true,
+            retainContextWhenHidden: true,
             // And restric the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
                 vscode.Uri.file(path.join(this.context.extensionPath, "svg")),
@@ -81,10 +59,6 @@ export class PanelManager {
         this.webViewPanel.onDidDispose(() => {
             this.eventWebviewDispose.next();
         }, null, this.context.subscriptions);
-
-        if (ae && ae.document && ae.document.uri) {
-            vscode.window.showTextDocument(ae.document);
-        }
 
         this.eventCreate.next(this.webViewPanel);
         return this.webViewPanel;

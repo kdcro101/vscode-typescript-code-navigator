@@ -3,6 +3,7 @@ import { merge as observableMerge, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, filter, map, tap } from "rxjs/operators";
 import * as vscode from "vscode";
 
+import { ViewColumn } from "vscode";
 import { DocumentMemory, DocumentUpdateBundle, MessageCollapseStateData, WebviewMessage } from "../types";
 import { DocumentStateItem } from "../types/index";
 import { ContentParser } from "./parser";
@@ -26,6 +27,7 @@ export class EditorMonitor {
     public lastFsPath: string = null;
     public lastHtml: string = null;
 
+    public lastEditor: vscode.TextEditor = null;
     public lastDocumentActionable: vscode.TextDocument = null;
     public lastDocumentFocusable: vscode.TextDocument = null;
     private panel: vscode.WebviewPanel = null;
@@ -70,15 +72,20 @@ export class EditorMonitor {
                 filter((d) => d == null || (d != null && d.document != null && d.document.languageId !== "typescript")),
             ),
         ).pipe(
-            tap(() => console.log("Not typescript or null")),
             map<vscode.TextEditor, vscode.TextDocument>((d) => d != null && d.document != null ? d.document : null),
             filter(() => this.panel != null),
-            filter(() => this.panel.visible === false),
-        ).subscribe((d) => this.updatePanelNotTypescript(d));
+            // filter(() => this.panel.visible === false),
+        ).subscribe((d) => {
+            this.updatePanelNotTypescript(d);
+        });
 
         this.eventChangeActiveTextEditor.pipe(
             filter((d) => d != null && d.document != null),
-        ).subscribe((d) => this.lastDocumentFocusable = d.document);
+        ).subscribe((d) => {
+
+            this.lastEditor = d;
+            this.lastDocumentFocusable = d.document;
+        });
 
         this.eventChangeActiveTextEditor.pipe(
             filter(() => this.panel != null),
@@ -111,7 +118,7 @@ export class EditorMonitor {
 
         this.eventDocumentUpdate.pipe(
             filter(() => this.panel != null),
-            filter((d) => d.document.languageId === "typescript" ),
+            filter((d) => d.document.languageId === "typescript"),
             filter((d) => d.ignoreFsPathCheck || (this.lastFsPath !== d.document.uri.fsPath)),
             tap((d) => {
                 this.lastFsPath = d.document.uri.fsPath;
@@ -143,9 +150,12 @@ export class EditorMonitor {
 
         this.eventMessage.pipe(
             filter((d) => d.command === "focusEditor"),
-            filter(() => this.lastUri != null),
+            filter(() => this.lastEditor != null),
         ).subscribe((d) => {
-            vscode.window.showTextDocument(this.lastUri);
+            // vscode.window.showTextDocument(this.lastUri, {
+            //     viewColumn: ViewColumn.Active,
+            // });
+            // this.lastEditor.show();
         });
 
         this.eventMessage.pipe(
@@ -195,8 +205,9 @@ export class EditorMonitor {
                 ignoreFsPathCheck: false,
             });
         }
-        this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) =>
-            this.eventMessage.next(m), null, this.context.subscriptions);
+        this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => {
+            this.eventMessage.next(m);
+        }, null, this.context.subscriptions);
 
         this.panel.onDidChangeViewState((e) => {
             console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
@@ -234,9 +245,7 @@ export class EditorMonitor {
         const next = !current;
         config.update("typescript.navigator.showIcons", next)
             .then((result) => {
-                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
-                // vscode.window.showTextDocument(this.lastDocumentActionable);
-                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+
                 const m: WebviewMessage<boolean> = {
                     command: "toggleShowIconsDone",
                     data: next,
@@ -253,9 +262,7 @@ export class EditorMonitor {
         const next = !current;
         config.update("typescript.navigator.showVisibilityLabels", next)
             .then((result) => {
-                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
-                // vscode.window.showTextDocument(this.lastDocumentActionable);
-                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+
                 const m: WebviewMessage<boolean> = {
                     command: "toggleShowVisibilityDone",
                     data: next,
@@ -271,9 +278,7 @@ export class EditorMonitor {
         const next = !current;
         config.update("typescript.navigator.showDataTypes", next)
             .then((result) => {
-                console.log(`updating ${this.lastDocumentActionable.uri.fsPath}`);
-                // vscode.window.showTextDocument(this.lastDocumentActionable);
-                // this.eventDocumentUpdate.next(this.lastDocumentActionable);
+
                 const m: WebviewMessage<boolean> = {
                     command: "toggleShowDataTypesDone",
                     data: next,
