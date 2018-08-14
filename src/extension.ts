@@ -7,11 +7,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     (global as any).vscode = vscode;
 
-    const config = vscode.workspace.getConfiguration();
     const monitor = new EditorMonitor(context);
     const panelManager = new PanelManager(context);
     const highlight = vscode.window.createTextEditorDecorationType({ backgroundColor: "rgba(200,200,200,.35)" });
-    const isActive: boolean = config.get("typescript.navigator.active");
 
     panelManager.eventCreate
         .subscribe((w) => monitor.setPanel(w));
@@ -19,7 +17,6 @@ export function activate(context: vscode.ExtensionContext) {
         .subscribe(() => monitor.setPanel(null));
 
     context.subscriptions.push(vscode.commands.registerCommand("extension.showTypescriptMembers", () => {
-        config.update("typescript.navigator.active", true, false);
         panelManager.create();
     }));
 
@@ -32,7 +29,6 @@ export function activate(context: vscode.ExtensionContext) {
 
                 const ps = editor.document.positionAt(propStart);
                 const pe = editor.document.positionAt(propStart);
-                // const pe = editor.document.positionAt(propEnd);
 
                 editor.setDecorations(highlight, [new vscode.Range(start, end)]);
                 setTimeout(() => editor.setDecorations(highlight, []), 1500);
@@ -43,7 +39,11 @@ export function activate(context: vscode.ExtensionContext) {
         }
     });
 
-    if (isActive) {
-        vscode.commands.executeCommand("extension.showTypescriptMembers");
-    }
+    const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 1);
+    status.command = "extension.showTypescriptMembers";
+    context.subscriptions.push(status);
+    status.text = "$(gist)";
+    status.tooltip = "Show code navigator for Typescript";
+    status.show();
+
 }

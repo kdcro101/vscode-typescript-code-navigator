@@ -1,12 +1,11 @@
-import * as path from "path";
-import { merge as observableMerge, Subject } from "rxjs";
-import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, filter, map, tap } from "rxjs/operators";
+import { fromEventPattern, merge as observableMerge, Subject } from "rxjs";
+import { debounceTime, filter, map, tap } from "rxjs/operators";
 import * as vscode from "vscode";
-
-import { ViewColumn } from "vscode";
 import { DocumentMemory, DocumentUpdateBundle, MessageCollapseStateData, WebviewMessage } from "../types";
 import { DocumentStateItem } from "../types/index";
+import { PanelManager } from "./panel";
 import { ContentParser } from "./parser";
+
 export interface ChangeActiveTextEditorEvent {
     editor: vscode.TextEditor;
     path: string;
@@ -31,26 +30,69 @@ export class EditorMonitor {
     public lastDocumentActionable: vscode.TextDocument = null;
     public lastDocumentFocusable: vscode.TextDocument = null;
     private panel: vscode.WebviewPanel = null;
+    private panelManager: PanelManager = null;
 
     private memo: DocumentMemory = {};
 
+    private visibleEditors: vscode.TextEditor[] = [];
+
     constructor(private context: vscode.ExtensionContext) {
 
+        fromEventPattern<vscode.TextEditor[]>((f: (e: any) => any) => {
+            return vscode.window.onDidChangeVisibleTextEditors(f, null, context.subscriptions);
+        }, (f: any, d: vscode.Disposable) => {
+            d.dispose();
+        }).pipe(
+            debounceTime(300),
+            tap((e) => {
+                console.log(`deboundev visibleEditors len=${e.length}`);
+            }),
+            filter((e) => e.length === 0),
+        ).subscribe((m) => {
+            this.panel = null;
+            this.panelManager.close();
+        });
+
         context.subscriptions.push(
-            vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) => this.eventChangeConfiguration.next(e)),
+            vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) => {
+                console.log("onDidChangeConfiguration");
+                this.eventChangeConfiguration.next(e);
+            }),
         );
         context.subscriptions.push(
-            vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => this.eventCloseTextDocument.next(e)),
+            vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => {
+                console.log("onDidCloseTextDocument");
+                console.log(`panel=${this.panel}`);
+                this.eventCloseTextDocument.next(e);
+            }),
         );
         context.subscriptions.push(
-            vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => this.eventChangeActiveTextEditor.next(e)),
+            vscode.window.onDidChangeVisibleTextEditors((e: vscode.TextEditor[]) => {
+
+                this.visibleEditors = e;
+                console.log(`knowEditors = ${vscode.workspace.textDocuments.length}`);
+                console.log(`onDidChangeVisibleTextEditors = ${e.length}`);
+
+            }),
         );
         context.subscriptions.push(
-            vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => this.eventChangeTextDocument.next(e)),
+            vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
+                console.log("onDidChangeActiveTextEditor");
+                this.eventChangeActiveTextEditor.next(e);
+            }),
         );
         context.subscriptions.push(
-            vscode.window.onDidChangeTextEditorSelection((e: vscode.TextEditorSelectionChangeEvent) =>
-                this.eventChangeTextEditorSelection.next(e)));
+            vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
+                console.log("onDidChangeTextDocument");
+                this.eventChangeTextDocument.next(e);
+
+            }),
+        );
+        context.subscriptions.push(
+            vscode.window.onDidChangeTextEditorSelection((e: vscode.TextEditorSelectionChangeEvent) => {
+                console.log("onDidChangeTextEditorSelection");
+                this.eventChangeTextEditorSelection.next(e);
+            }));
 
         this.eventCloseTextDocument.pipe(
             filter((d) => d != null),
@@ -72,8 +114,8 @@ export class EditorMonitor {
                 filter((d) => d == null || (d != null && d.document != null && d.document.languageId !== "typescript")),
             ),
         ).pipe(
-            map<vscode.TextEditor, vscode.TextDocument>((d) => d != null && d.document != null ? d.document : null),
             filter(() => this.panel != null),
+            map<vscode.TextEditor, vscode.TextDocument>((d) => d != null && d.document != null ? d.document : null),
             // filter(() => this.panel.visible === false),
         ).subscribe((d) => {
             this.updatePanelNotTypescript(d);
@@ -189,28 +231,26 @@ export class EditorMonitor {
         this.panel.webview.html = ``;
 
     }
-    public setPanel(val: vscode.WebviewPanel) {
-        console.log("EditorMonitor.setPanel");
-        console.log(val);
-        this.panel = val;
-        const ae = vscode.window.activeTextEditor;
-
-        if (val == null) {
+    public setPanel(p: PanelManager) {
+        console.log(`setPanel ${p}`);
+        if (p == null) {
+            console.log(`setPanel for null`);
+            this.panel = null;
             return;
         }
+        this.panelManager = p;
+        this.panel = p.webViewPanel;
+        const ae = vscode.window.activeTextEditor;
 
-        if (val != null && ae != null) {
+        if (ae != null) {
             this.eventDocumentUpdate.next({
                 document: ae.document,
                 ignoreFsPathCheck: false,
             });
         }
+
         this.panel.webview.onDidReceiveMessage((m: WebviewMessage<any>) => {
             this.eventMessage.next(m);
-        }, null, this.context.subscriptions);
-
-        this.panel.onDidChangeViewState((e) => {
-            console.log(`onDidChangeViewState ${e.webviewPanel.visible}`);
         }, null, this.context.subscriptions);
 
         this.panel.onDidDispose(() => {

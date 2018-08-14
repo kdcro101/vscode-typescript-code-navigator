@@ -18,6 +18,10 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 
 To open panel press CTRL+P (Show all commands) and select `Show code navigator for typescript`
 
+or
+
+click icon on status bar.
+
     
 ## Configuration
 `typescript.navigator.collapseEnums` : `boolean`
