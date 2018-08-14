@@ -2,6 +2,7 @@
 
 - compatibility with 1.26
 - icon on panel
+- status bar icon 
 
 ## 1.1.0 | 2018.05.11
 
