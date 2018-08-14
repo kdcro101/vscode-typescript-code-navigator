@@ -14,8 +14,6 @@ Open Visual Studio Code press CTRL+p and type or copy and paste:
 
 `ext install kdcro101.typescript-code-navigator`
 
-## Behaviour
-
 ## Usage
 
 To open panel press CTRL+P (Show all commands) and select `Show code navigator for typescript`
@@ -23,6 +21,15 @@ To open panel press CTRL+P (Show all commands) and select `Show code navigator f
 or
 
 click icon <img style="vertical-align:middle" src="https://raw.githubusercontent.com/kdcro101/vscode-typescript-code-navigator/master/media/statusbar.jpg">  on right side of status bar.
+
+
+Click on member in code navigator panel to highlight selected member in active editor.
+
+
+## Behaviour
+
+Code navigator will update when active editor changes. When there is no opened documents, code navigator will close itself 
+
 
 ## Configuration
 `typescript.navigator.collapseEnums` : `boolean`
