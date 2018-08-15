@@ -34,6 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
                 setTimeout(() => editor.setDecorations(highlight, []), 1500);
 
                 editor.revealRange(new vscode.Range(ps, pe), vscode.TextEditorRevealType.InCenter);
+                editor.show(editor.viewColumn);
 
             }
         }

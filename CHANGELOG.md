@@ -1,3 +1,8 @@
+## 1.2.1 | 2018.08.15
+
+- fixed editor refocus
+- fixed error thrown on startup when no documents opened
+
 ## 1.2.0 | 2018.08.14
 
 - compatibility with 1.26

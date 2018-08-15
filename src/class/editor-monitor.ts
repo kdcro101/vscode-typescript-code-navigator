@@ -48,6 +48,7 @@ export class EditorMonitor {
                 console.log(`deboundev visibleEditors len=${e.length}`);
             }),
             filter((e) => e.length === 0),
+            filter(() => this.panelManager != null),
         ).subscribe((m) => {
             this.panel = null;
             this.panelManager.close();
@@ -236,6 +237,7 @@ export class EditorMonitor {
         if (p == null) {
             console.log(`setPanel for null`);
             this.panel = null;
+            this.panelManager = null;
             return;
         }
         this.panelManager = p;
