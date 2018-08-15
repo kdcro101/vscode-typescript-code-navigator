@@ -1,3 +1,8 @@
+## 1.2.2 | 2018.08.15
+
+- replace depracated TextEditor.show with Window.showTextDocument
+- remove unnecessary padding when member doesn't have visibility declared
+
 ## 1.2.1 | 2018.08.15
 
 - fixed editor refocus

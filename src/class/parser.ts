@@ -423,6 +423,11 @@ export class ContentParser {
         let visibilityText: string = "";
         const dataTypeText: string = dataType == null ? "" : dataType;
 
+        if (visibility != null && visibility.trim() === "") {
+            console.log("visibliity is empty");
+            visibility = null;
+        }
+
         switch (visibility) {
             case "private":
                 visibilityText = "pri";
