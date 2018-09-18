@@ -12,11 +12,58 @@
     "typescript.navigator.showVisibilityLabels": true,
     "typescript.navigator.showIcons": false,
     "typescript.navigator.showDataTypes": true,
-    "favorites.root": [{
-        "type": "Directory",
-        "name": "/exec/vscode-extension-samples/previewhtml-sample/out",
-        "parent_id": null,
-        "id": "ZFOKxuCfz3QRJoDp",
-        "workspacePath": "out"
-    }] // we want to use the TS server from our node_modules folder to control its version
+    "favorites.root": [
+        {
+            "type": "Directory",
+            "name": "/exec/vscode-extension-samples/previewhtml-sample/out",
+            "parent_id": null,
+            "id": "ZFOKxuCfz3QRJoDp",
+            "workspacePath": "out"
+        },
+        {
+            "type": "Directory",
+            "name": "/exec/vscode-typescript-code-navigator/icon",
+            "parent_id": null,
+            "workspacePath": "icon",
+            "id": "ATySzbVlaIMOoXRw"
+        },
+        {
+            "type": "File",
+            "name": "/exec/vscode-typescript-code-navigator/src/types/index.ts",
+            "parent_id": null,
+            "workspacePath": "src/types/index.ts",
+            "id": "WA1eRfY38XEC7zxM"
+        },
+        {
+            "type": "Group",
+            "name": "group",
+            "parent_id": null,
+            "id": "Ghd4Dn3WepayjRE1",
+            "iconColor": "rgb(0, 255, 0)",
+            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_d6cf4168aae3224d9df54f674c125601.svg"
+        },
+        {
+            "type": "Group",
+            "name": "subgroup",
+            "parent_id": "Ghd4Dn3WepayjRE1",
+            "id": "SKXdZflGAm9Ir0qs",
+            "iconColor": "rgb(255, 0, 255)",
+            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_feba29b572026f0ba013c949c83a8d67.svg"
+        },
+        {
+            "type": "Group",
+            "name": "another group",
+            "parent_id": "SKXdZflGAm9Ir0qs",
+            "id": "zovQ0cGUknsFuSqy",
+            "iconColor": "rgb(0, 191, 255)",
+            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_f23ffb274ea251979cda1c3c7231987b.svg"
+        },
+        {
+            "type": "File",
+            "name": "/exec/vscode-typescript-code-navigator/scss/index.scss",
+            "parent_id": "zovQ0cGUknsFuSqy",
+            "workspacePath": "scss/index.scss",
+            "id": "XsHQrlZTupvdo1IU"
+        }
+    ] // we want to use the TS server from our node_modules folder to control its version
 }
