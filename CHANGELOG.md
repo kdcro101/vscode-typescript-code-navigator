@@ -1,3 +1,7 @@
+## 1.2.2 | 2018.09.28
+
+- README badges update
+
 ## 1.2.2 | 2018.08.15
 
 - replace depracated TextEditor.show with Window.showTextDocument
