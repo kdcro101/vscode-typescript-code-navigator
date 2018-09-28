@@ -1,8 +1,9 @@
 # Code navigator for typescript
 
-[![Visual Studio Marketplace](https://img.shields.io/vscode-marketplace/v/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
-[![Installs](https://img.shields.io/vscode-marketplace/d/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
-[![Rating](https://img.shields.io/vscode-marketplace/r/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
+[![Visual Studio Marketplace](https://vsmarketplacebadge.apphb.com/version/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/kdcro101.typescript-code-navigator.svg)](https://marketplace.visualstudio.com/items?itemName=kdcro101.typescript-code-navigator)
+
 
 Extension provides ability to browse typescript source code by using side panel populated with list of declarations in currently opened typescript file.
 

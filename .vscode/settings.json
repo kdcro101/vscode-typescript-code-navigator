@@ -12,8 +12,7 @@
     "typescript.navigator.showVisibilityLabels": true,
     "typescript.navigator.showIcons": false,
     "typescript.navigator.showDataTypes": true,
-    "favorites.root": [
-        {
+    "favorites.root": [{
             "type": "Directory",
             "name": "/exec/vscode-extension-samples/previewhtml-sample/out",
             "parent_id": null,
@@ -39,24 +38,21 @@
             "name": "group",
             "parent_id": null,
             "id": "Ghd4Dn3WepayjRE1",
-            "iconColor": "rgb(0, 255, 0)",
-            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_d6cf4168aae3224d9df54f674c125601.svg"
+            "iconColor": "rgb(0, 255, 0)"
         },
         {
             "type": "Group",
             "name": "subgroup",
             "parent_id": "Ghd4Dn3WepayjRE1",
             "id": "SKXdZflGAm9Ir0qs",
-            "iconColor": "rgb(255, 0, 255)",
-            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_feba29b572026f0ba013c949c83a8d67.svg"
+            "iconColor": "rgb(255, 0, 255)"
         },
         {
             "type": "Group",
             "name": "another group",
             "parent_id": "SKXdZflGAm9Ir0qs",
             "id": "zovQ0cGUknsFuSqy",
-            "iconColor": "rgb(0, 191, 255)",
-            "iconPath": "/exec/vscode-favorite-items/svg-generated/icon_f23ffb274ea251979cda1c3c7231987b.svg"
+            "iconColor": "rgb(0, 191, 255)"
         },
         {
             "type": "File",
