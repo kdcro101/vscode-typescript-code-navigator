@@ -42,11 +42,11 @@ export class PanelManager {
     }
 
     public close() {
-        console.log(`panelManager.close()`);
+
         if (this.webViewPanel == null) {
-            console.log(`panel is null`);
             return;
         }
+
         this.webViewPanel.dispose();
         this.webViewPanel = null;
 

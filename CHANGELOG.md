@@ -1,3 +1,8 @@
+## 1.2.4 | 2018.10.17
+
+- removal of redundant console.log output 
+- code cleanup
+
 ## 1.2.2 | 2018.09.28
 
 - README badges update

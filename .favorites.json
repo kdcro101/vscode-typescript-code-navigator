@@ -1,0 +1,51 @@
+[
+    {
+        "type": "Directory",
+        "name": "/exec/vscode-extension-samples/previewhtml-sample/out",
+        "parent_id": null,
+        "id": "ZFOKxuCfz3QRJoDp",
+        "workspacePath": "out"
+    },
+    {
+        "type": "Directory",
+        "name": "/exec/vscode-typescript-code-navigator/icon",
+        "parent_id": null,
+        "workspacePath": "icon",
+        "id": "ATySzbVlaIMOoXRw"
+    },
+    {
+        "type": "File",
+        "name": "/exec/vscode-typescript-code-navigator/src/types/index.ts",
+        "parent_id": null,
+        "workspacePath": "src/types/index.ts",
+        "id": "WA1eRfY38XEC7zxM"
+    },
+    {
+        "type": "Group",
+        "name": "group",
+        "parent_id": null,
+        "id": "Ghd4Dn3WepayjRE1",
+        "iconColor": "rgb(0, 255, 0)"
+    },
+    {
+        "type": "Group",
+        "name": "subgroup",
+        "parent_id": "Ghd4Dn3WepayjRE1",
+        "id": "SKXdZflGAm9Ir0qs",
+        "iconColor": "rgb(255, 0, 255)"
+    },
+    {
+        "type": "Group",
+        "name": "another group",
+        "parent_id": "SKXdZflGAm9Ir0qs",
+        "id": "zovQ0cGUknsFuSqy",
+        "iconColor": "rgb(0, 191, 255)"
+    },
+    {
+        "type": "File",
+        "name": "/exec/vscode-typescript-code-navigator/scss/index.scss",
+        "parent_id": "zovQ0cGUknsFuSqy",
+        "workspacePath": "scss/index.scss",
+        "id": "XsHQrlZTupvdo1IU"
+    }
+]

@@ -44,9 +44,6 @@ export class EditorMonitor {
             d.dispose();
         }).pipe(
             debounceTime(300),
-            tap((e) => {
-                console.log(`deboundev visibleEditors len=${e.length}`);
-            }),
             filter((e) => e.length === 0),
             filter(() => this.panelManager != null),
         ).subscribe((m) => {
@@ -56,42 +53,31 @@ export class EditorMonitor {
 
         context.subscriptions.push(
             vscode.workspace.onDidChangeConfiguration((e: vscode.ConfigurationChangeEvent) => {
-                console.log("onDidChangeConfiguration");
                 this.eventChangeConfiguration.next(e);
             }),
         );
         context.subscriptions.push(
             vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => {
-                console.log("onDidCloseTextDocument");
-                console.log(`panel=${this.panel}`);
                 this.eventCloseTextDocument.next(e);
             }),
         );
         context.subscriptions.push(
             vscode.window.onDidChangeVisibleTextEditors((e: vscode.TextEditor[]) => {
-
                 this.visibleEditors = e;
-                console.log(`knowEditors = ${vscode.workspace.textDocuments.length}`);
-                console.log(`onDidChangeVisibleTextEditors = ${e.length}`);
-
             }),
         );
         context.subscriptions.push(
             vscode.window.onDidChangeActiveTextEditor((e: vscode.TextEditor) => {
-                console.log("onDidChangeActiveTextEditor");
                 this.eventChangeActiveTextEditor.next(e);
             }),
         );
         context.subscriptions.push(
             vscode.workspace.onDidChangeTextDocument((e: vscode.TextDocumentChangeEvent) => {
-                console.log("onDidChangeTextDocument");
                 this.eventChangeTextDocument.next(e);
-
             }),
         );
         context.subscriptions.push(
             vscode.window.onDidChangeTextEditorSelection((e: vscode.TextEditorSelectionChangeEvent) => {
-                console.log("onDidChangeTextEditorSelection");
                 this.eventChangeTextEditorSelection.next(e);
             }));
 
@@ -147,10 +133,6 @@ export class EditorMonitor {
 
         this.eventChangeTextDocument.pipe(
             filter(() => this.panel != null),
-            tap((d) => {
-                console.log("eventChangeTextDocument");
-                console.log(d);
-            }),
             filter((d) => d != null && d.document != null),
             filter((d) => d.document.languageId === "typescript"),
             debounceTime(500),
@@ -210,7 +192,6 @@ export class EditorMonitor {
 
     }
     public updatePanel(d: vscode.TextDocument) {
-        console.log(`updatePanel ${d.uri.fsPath}`);
         const data = this.memo[d.uri.fsPath];
 
         const parser = new ContentParser(this.context, d, data);
@@ -233,9 +214,8 @@ export class EditorMonitor {
 
     }
     public setPanel(p: PanelManager) {
-        console.log(`setPanel ${p}`);
+
         if (p == null) {
-            console.log(`setPanel for null`);
             this.panel = null;
             this.panelManager = null;
             return;

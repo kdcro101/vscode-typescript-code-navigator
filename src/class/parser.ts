@@ -63,7 +63,6 @@ export class ContentParser {
         return new Promise((resolve, reject) => {
 
             const d = this.documentToParse;
-            console.log(`generateHtml ${d.uri.fsPath}`);
 
             if (d == null) {
                 resolve("");
@@ -113,12 +112,8 @@ export class ContentParser {
     }
     public renderData(data: File): Promise<string> {
         return new Promise((resolve, reject) => {
-            console.log(data);
 
             const iconsPath = "vscode-resource:" + this.context.extensionPath + "/svg/symbol-sprite.svg";
-            // const iconsPath = "vscode-resource:/symbol-sprite.svg";
-            // var documentStatesRaw='${JSON.stringify(this.docState)}';
-            // var documentStates= JSON.parse(documentStatesRaw);
 
             Promise.all([])
                 .then((results) => {
@@ -424,7 +419,6 @@ export class ContentParser {
         const dataTypeText: string = dataType == null ? "" : dataType;
 
         if (visibility != null && visibility.trim() === "") {
-            console.log("visibliity is empty");
             visibility = null;
         }
 
